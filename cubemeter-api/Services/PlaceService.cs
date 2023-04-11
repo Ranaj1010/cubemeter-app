@@ -42,7 +42,7 @@ namespace cubemeter_api.Services
             }
         }
 
-        public async Task<Place> GetAsync(Expression<Func<Place, bool>> expression) => await _dbContext.Places.Where(expression).FirstAsync();
+        public async Task<Place> GetAsync(Expression<Func<Place, bool>> expression) => await _dbContext.Places.SingleOrDefaultAsync(expression);
 
         public async Task<List<Place>> ListAsync(Expression<Func<Place, bool>> expression) => await _dbContext.Places.Where(expression).ToListAsync();
     

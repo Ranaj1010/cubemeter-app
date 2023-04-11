@@ -1,4 +1,5 @@
 import { IBaseModel } from "./base";
+import IPlace from "./place";
 
 interface ITenant extends IBaseModel {
 	name: string;
@@ -8,6 +9,7 @@ interface ITenant extends IBaseModel {
 	dateRegistered: Date;
 	gateway: string;
 	remarks: string;
+	place?: IPlace;
 }
 
 export default ITenant;

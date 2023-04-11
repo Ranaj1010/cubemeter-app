@@ -17,7 +17,7 @@ namespace cubemeter_api.Services
 
         public async Task<Tenant> AddAsync(Tenant entity)
         {
-            entity.DateRegistered = DateTime.Now;
+            entity.DateRegistered = DateTime.UtcNow;
             await _dbContext.Tenants.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
@@ -45,9 +45,35 @@ namespace cubemeter_api.Services
             }
         }
 
-        public async Task<Tenant> GetAsync(Expression<Func<Tenant, bool>> expression) => await _dbContext.Tenants.Where(expression).FirstAsync();
+        public async Task<Tenant> GetAsync(Expression<Func<Tenant, bool>> expression) => await _dbContext.Tenants.Join(_dbContext.Places, tenant => tenant.PlaceId, place => place.Id, (tenant, place) => new Tenant
+        {
+            Id = tenant.Id,
+            Name = tenant.Name,
+            UnitId = tenant.UnitId,
+            PlaceId = tenant.PlaceId,
+            Meters = tenant.Meters,
+            DateRegistered = tenant.DateRegistered,
+            Gateway = tenant.Gateway,
+            Active = tenant.Active,
+            Remarks = tenant.Remarks,
+            SerialNumber = tenant.SerialNumber,
+            Place = place,
+        }).SingleOrDefaultAsync(expression);
 
-        public async Task<List<Tenant>> ListAsync(Expression<Func<Tenant, bool>> expression) => await _dbContext.Tenants.Where(expression).ToListAsync();
+        public async Task<List<Tenant>> ListAsync(Expression<Func<Tenant, bool>> expression) => await _dbContext.Tenants.Where(expression).Join(_dbContext.Places, tenant => tenant.PlaceId, place => place.Id, (tenant, place) => new Tenant
+        {
+            Id = tenant.Id,
+            Name = tenant.Name,
+            UnitId = tenant.UnitId,
+            PlaceId = tenant.PlaceId,
+            Meters = tenant.Meters,
+            DateRegistered = tenant.DateRegistered,
+            Gateway = tenant.Gateway,
+            Active = tenant.Active,
+            Remarks = tenant.Remarks,
+            SerialNumber = tenant.SerialNumber,
+            Place = place,
+        }).ToListAsync();
 
         public async Task<bool> UpdateAsync(Tenant entity)
         {

@@ -6,8 +6,8 @@ namespace cubemeter_api.DTOs.Tenant.Outgoing
     {
         public GetTenantsResponse()
         {
-            Tenants = new List<TenantDto>();
+            Data = new List<TenantDto>();
         }
-        public List<TenantDto> Tenants { get; set; }
+        public List<TenantDto> Data { get; set; }
     }
 }

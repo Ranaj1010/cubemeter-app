@@ -1,4 +1,5 @@
 using cubemeter_api.Base;
+using cubemeter_api.DTOs.Place;
 
 namespace cubemeter_api.DTOs.Tenant
 {
@@ -11,6 +12,8 @@ namespace cubemeter_api.DTOs.Tenant
         public DateTime DateRegistered { get; set; }
         public string Gateway { get; set; }
         public string Remarks { get; set; }
+
+        public virtual PlaceDto? Place { get; set; }
 
     }
 }
