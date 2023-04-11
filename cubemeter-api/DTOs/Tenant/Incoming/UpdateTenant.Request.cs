@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 
 namespace cubemeter_api.DTOs.Tenant.Incoming
 {
-    public class UpdateTenantRequest
+    public class UpdateTenantRequest : TenantDto
     {
-        public TenantDto Data { get; set; }
     }
 }

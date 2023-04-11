@@ -13,6 +13,8 @@ namespace cubemeter_api.Controllers
     [Route("place")]
     public class PlaceController : ControllerBase
     {
+        private readonly string _name = "Place";
+        private readonly string _names = "Places";
         private readonly IPlaceService _placeService;
         private readonly IMapper _mapper;
 
@@ -22,7 +24,6 @@ namespace cubemeter_api.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet]
         public async Task<ActionResult<GetPlacesResponse>> GetAll()
         {
@@ -30,7 +31,7 @@ namespace cubemeter_api.Controllers
 
             var response = new GetPlacesResponse
             {
-                Message = $"{data.Count} item/s found.",
+                Message = data.Count > 1 ? $"{data.Count} {_names} found." : $"No {_names} found.",
                 Data = _mapper.Map<List<PlaceDto>>(data).OrderBy(e => e.Id).ToList()
             };
             return Ok(response);
@@ -39,26 +40,20 @@ namespace cubemeter_api.Controllers
         [HttpGet("{id:long}")]
         public async Task<ActionResult<GetPlacesResponse>> GetById(long id)
         {
-            try
+            #region Data Validation
+            var data = await _placeService.GetAsync((place) => place.Id.Equals(id));
+            if (data == null) return BadRequest(new GetPlaceResponse
             {
-                var data = await _placeService.GetAsync((place) => place.Id.Equals(id));
+                Message = $"Invalid Request. Unknown {_name}"
+            });
+            #endregion
 
-                var response = new GetPlaceResponse
-                {
-                    Message = $"Data found.",
-                    Data = _mapper.Map<PlaceDto>(data)
-                };
-                return Ok(response);
-            }
-            catch (System.Exception)
+            var response = new GetPlaceResponse
             {
-
-                var response = new GetPlaceResponse
-                {
-                    Message = $"No data found."
-                };
-                return NotFound(response);
-            }
+                Message = $"{_name} found.",
+                Data = _mapper.Map<PlaceDto>(data)
+            };
+            return Ok(response);
         }
 
         [HttpPost]
@@ -70,21 +65,28 @@ namespace cubemeter_api.Controllers
             var response = new AddPlaceResponse
             {
                 Data = dto,
-                Message = $"{created.Name} has been created."
+                Message = $"{created.Name} has been created successfully."
             };
 
             return Ok(response);
-
         }
         [HttpPut]
         public async Task<ActionResult<UpdatePlaceRespose>> UpdatePlace(UpdatePlaceRequest request)
         {
+            #region Data Validation
+            var data = await _placeService.GetAsync((place) => place.Id.Equals(request.Id));
+            if (data == null) return BadRequest(new UpdatePlaceRespose
+            {
+                Message = $"Invalid Request. Unknown {_name}"
+            });
+            #endregion
+
             var entity = _mapper.Map<Place>(request);
             var created = await _placeService.UpdateAsync(entity);
             var response = new UpdatePlaceRespose
             {
                 Data = request,
-                Message = created ? "Place has been updated." : "Unable to update Place. Please try again"
+                Message = created ? $"{_name} has been successfully updated." : $"Unable to delete {_name}. Please try again"
             };
 
             return created ? Ok(response) : BadRequest(response);
@@ -94,24 +96,23 @@ namespace cubemeter_api.Controllers
         [HttpDelete("{id:long}")]
         public async Task<ActionResult<DeletePlaceResponse>> DeleteById(long id)
         {
-            try
+            #region Data Validation
+            var data = await _placeService.GetAsync((place) => place.Id.Equals(id));
+            if (data == null) return BadRequest(new DeletePlaceResponse
             {
-                var data = await _placeService.DeleteAsync(id);
+                Message = $"Invalid Request. Unknown {_name}"
+            });
+            #endregion
 
-                var response = new DeletePlaceResponse
-                {
-                    Message = $"Place has been successfully deleted.",
-                };
-                return Ok(response);
-            }
-            catch (System.Exception e)
+            var deleted = await _placeService.DeleteAsync(id);
+
+            var response = new DeletePlaceResponse
             {
-                var response = new DeletePlaceResponse
-                {
-                    Message = $"Failed to delete record. {e.Message} "
-                };
-                return NotFound(response);
-            }
+                Message = deleted ? $"{_name} has been successfully deleted." : $"Unable to update {_name}. Please try again"
+            };
+
+            return deleted ? Ok(response) : BadRequest(response);
+
         }
 
     }

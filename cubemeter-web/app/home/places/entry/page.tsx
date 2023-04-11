@@ -1,14 +1,7 @@
 "use client";
 
 import { BreadCrumbComponent } from "@/components/breadcrumbs";
-import {
-	IEntryModeEnum,
-	InputFormControl,
-	InputNumberFormControl,
-	RequiredFieldLabelText,
-	SelectFormControl,
-	TextAreaFormControl,
-} from "@/components/form-controls";
+import { InputFormControl, InputNumberFormControl, RequiredFieldLabelText, SelectFormControl, TextAreaFormControl } from "@/components/form-controls";
 import { ILatLngProps, MapInputControl, MapViewControl } from "@/components/map-controls";
 import { ErrorNotification, FailedNotification, SuccessNotification } from "@/components/notifications";
 import { IStepperItemProp, StepperComponent, StepperStateEnum } from "@/components/stepper";
@@ -82,24 +75,23 @@ const Page = () => {
 	//#endregion
 
 	//#region location details form
-	const initialBasicDetailsValue: IBasicDetailsProp =
-		current.context.mode == IEntryModeEnum.create
-			? {
-					name: "",
-					timezone: "",
-					country: "",
-					region: "",
-					city: "",
-					address: "",
-			  }
-			: {
-					name: current.context.payload?.name ?? "",
-					timezone: current.context.payload?.timezone ?? "",
-					country: current.context.payload?.country ?? "",
-					region: current.context.payload?.region ?? "",
-					city: current.context.payload?.city ?? "",
-					address: current.context.payload?.address ?? "",
-			  };
+	const initialBasicDetailsValue: IBasicDetailsProp = current.matches("create")
+		? {
+				name: "",
+				timezone: "",
+				country: "",
+				region: "",
+				city: "",
+				address: "",
+		  }
+		: {
+				name: current.context.payload?.name ?? "",
+				timezone: current.context.payload?.timezone ?? "",
+				country: current.context.payload?.country ?? "",
+				region: current.context.payload?.region ?? "",
+				city: current.context.payload?.city ?? "",
+				address: current.context.payload?.address ?? "",
+		  };
 
 	const locationDetailsModel = Schema.Model({
 		name: nameRule,
@@ -187,7 +179,7 @@ const Page = () => {
 	const onHandleFormValidation = (newStep: number) => {
 		//#region Location Validation
 		if (step == 0 && !locationDetailsFormRef.current!.check()) {
-			toaster.push(<ErrorNotification title="Incomplete Fields" message="Please complete all fields before proceeding." />, {
+			toaster.push(<ErrorNotification title="Incomplete Fields" message="Please complete all fields before submitting." />, {
 				duration: 3000,
 				placement: placement,
 			});

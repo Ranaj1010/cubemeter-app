@@ -19,7 +19,6 @@ namespace cubemeter_api.Data
         {
             modelBuilder.UseSerialColumns();
             modelBuilder.HasPostgresExtension("postgis");
-        
         }
     }
 }

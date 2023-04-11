@@ -3,6 +3,8 @@ using cubemeter_api.DTOs.Meter;
 using cubemeter_api.DTOs.Place;
 using cubemeter_api.DTOs.Place.Incoming;
 using cubemeter_api.DTOs.Tenant;
+using cubemeter_api.DTOs.Tenant.Incoming;
+using cubemeter_api.DTOs.Tenant.Outgoing;
 using cubemeter_api.Entities;
 using NetTopologySuite;
 
@@ -17,6 +19,11 @@ namespace cubemeter_api.Utilities
                 dest.Latitude = src.MapCoordinates.Y;
                 dest.Longitude = src.MapCoordinates.X;
             });
+            CreateMap<PlaceDto, Place>().AfterMap((src, dest) =>
+            {
+                dest.MapCoordinates.Y = src.Latitude;
+                dest.MapCoordinates.X = src.Latitude;
+            });
             CreateMap<UpdatePlaceRequest, Place>().AfterMap((src, dest) =>
             {
                 var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
@@ -29,6 +36,10 @@ namespace cubemeter_api.Utilities
                 var location = geometryFactory.CreatePoint(new NetTopologySuite.Geometries.Coordinate(src.Longitude, src.Latitude));
                 dest.MapCoordinates = location;
             });
+            
+            CreateMap<AddTenantRequest, Tenant>();
+            CreateMap<Tenant, AddTenantResponse>();
+
             CreateMap<Tenant, TenantDto>().ReverseMap();
             CreateMap<Meter, MeterDto>().ReverseMap();
         }
