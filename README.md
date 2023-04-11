@@ -13,7 +13,7 @@ $ cd cubemeter-app
 
 This project's web app is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-First, run the development server:
+To run this web app:
 
 ```
 $ cd cubemeter-web
@@ -25,7 +25,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 This project's api is an ASP.NET Core Web API Application
 
-First, run the development server:
+To run this API:
 
 ```bash
 $ cd cubemeter-api
@@ -36,12 +36,13 @@ $ cd dotnet watch run
 
 Open [http://localhost:5198/swagger/index.html](http://localhost:5198/swagger/index.html) with your browser to see the result.
 
-This project uses:
+### Dependencies
+This project uses the following dependencies:
 
 - [`Next JS App Directory`](https://beta.nextjs.org/docs/routing/fundamentals) for routing and navigation.
-- [`RSuite`](https://rsuitejs.com/) for UI Theme.
-- [`react-map-gl`](https://visgl.github.io/react-map-gl/) Mapping feature.
-- [`PostgreSQL`](https://www.postgresql.org/) with [`Entity Framework Core`](https://learn.microsoft.com/en-us/ef/) 
+- [`RSuite`](https://rsuitejs.com/) for look and feel.
+- [`react-map-gl`](https://visgl.github.io/react-map-gl/) for mapping and location capabilities.
+- [`PostgreSQL`](https://www.postgresql.org/) with [`Entity Framework Core`](https://learn.microsoft.com/en-us/ef/) for data persistence
 
 ## Learn More
 
