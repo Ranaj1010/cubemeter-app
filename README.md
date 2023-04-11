@@ -1,2 +1,57 @@
 # Cubemeter
 Energy Management System
+
+## Getting Started
+
+Fork this repo to your namespace and clone to your local machine.
+
+```
+git clone https://github.com/Ranaj1010/cubemeter-app.git
+$ cd cubemeter-app
+```
+## Web App (next.js)
+
+This project's web app is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+First, run the development server:
+
+```
+$ cd cubemeter-web
+$ npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Web API (Asp.net Core)
+
+This project's api is an ASP.NET Core Web API Application
+
+First, run the development server:
+
+```bash
+$ cd cubemeter-api
+$ cd dotnet restore
+$ cd dotnet build
+$ cd dotnet watch run
+```
+
+Open [http://localhost:5198/swagger/index.html](http://localhost:5198/swagger/index.html) with your browser to see the result.
+
+This project uses:
+
+- [`Next JS App Directory`](https://beta.nextjs.org/docs/routing/fundamentals) for routing and navigation.
+- [`RSuite`](https://rsuitejs.com/) for UI Theme.
+- [`react-map-gl`](https://visgl.github.io/react-map-gl/) Mapping feature.
+- [`PostgreSQL`](https://www.postgresql.org/) with [`Entity Framework Core`](https://learn.microsoft.com/en-us/ef/) 
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## License
+
+MIT © [simonguo](https://github.com/simonguo)
