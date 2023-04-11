@@ -1,0 +1,37 @@
+[
+    {
+        "name" : "Places: Create New Place",
+        "link" : "/home/places/entry?id=11",
+        "sideNavKey" : "places"
+    },
+    {
+		"name": "Places: View Places",
+		"link": "/home/places",
+		"sideNavKey": "places"
+	},
+    {
+		"name": "Tenants: Create New Tenant",
+		"link": "/home/tenants",
+		"sideNavKey": "tenants"
+	},
+    {
+		"name": "Tenants: View Tenants",
+		"link": "/home/tenants",
+		"sideNavKey": "tenants"
+	},
+    {
+		"name": "Meters: Create New Meter",
+		"link": "/home/meters",
+		"sideNavKey": "meters"
+	},
+    {
+		"name": "Meters: View Meters",
+		"link": "/home/meters",
+		"sideNavKey": "meters"
+	},
+    {
+		"name": "Overview: View Dashboard",
+		"link": "/home/dashboard",
+		"sideNavKey": "dashboard"
+	}
+]
