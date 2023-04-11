@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "MCBTX4Zqns2PbQdtJaFhjOlGcbahe2uHpGO/3PijN2o=",
+  "Source": "cubemeter-api",
+  "BasePath": "_content/cubemeter-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
