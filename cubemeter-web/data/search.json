@@ -1,7 +1,7 @@
 [
     {
         "name" : "Places: Create New Place",
-        "link" : "/home/places/entry?id=11",
+        "link" : "/home/places/entry?",
         "sideNavKey" : "places"
     },
     {
@@ -11,7 +11,7 @@
 	},
     {
 		"name": "Tenants: Create New Tenant",
-		"link": "/home/tenants",
+		"link": "/home/tenants/entry?",
 		"sideNavKey": "tenants"
 	},
     {

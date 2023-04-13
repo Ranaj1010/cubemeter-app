@@ -138,7 +138,7 @@ const Page = () => {
 					onHandleSortColumn={handleSortColumn}
 					sortColumn={sortColumn}
 					sortType={sortType}
-					onHandleEdit={(place: IPlace) => router.push(`home/places/entry?id=${place.id}`)}
+					onHandleEdit={(place: IPlace) => router.push(`/home/places/entry?id=${place.id}`)}
 					onHandleDelete={(place: IPlace) => send({ type: "DELETE", place: place })}
 				/>
 			)}

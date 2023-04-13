@@ -1,5 +1,7 @@
 using AutoMapper;
 using cubemeter_api.DTOs.Meter;
+using cubemeter_api.DTOs.Meter.Incoming;
+using cubemeter_api.DTOs.Meter.Outgoing;
 using cubemeter_api.DTOs.Place;
 using cubemeter_api.DTOs.Place.Incoming;
 using cubemeter_api.DTOs.Tenant;
@@ -39,8 +41,11 @@ namespace cubemeter_api.Utilities
             
             CreateMap<AddTenantRequest, Tenant>();
             CreateMap<Tenant, AddTenantResponse>();
-
             CreateMap<Tenant, TenantDto>().ReverseMap();
+
+            CreateMap<AddMeterRequest, Meter>();
+            CreateMap<Meter, AddMeterResponse>();
+            CreateMap<UpdateMeterRequest, Meter>();
             CreateMap<Meter, MeterDto>().ReverseMap();
         }
     }

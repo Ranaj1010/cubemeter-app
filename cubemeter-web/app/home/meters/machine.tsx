@@ -33,12 +33,12 @@ interface IStates {
 
 type ITypes = { type: "FETCH" } | { type: "RETRY" } | { type: "CANCEL" } | { type: "DELETE"; place: IMeter } | { type: "DELETE_START" };
 
-const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
-	id: "placesMachine",
+const MeterMachine = Machine<IContextProps, IStates, ITypes>({
+	id: "tenantMachine",
 	initial: "fetchingData",
 	context: {
 		data: [],
-		endpoint: "/place",
+		endpoint: "/meter",
 		errorMessage: "",
 		abortController: new AbortController(),
 	},
@@ -61,13 +61,13 @@ const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 					invoke: {
 						src: (context) => GET({ endpoint: context.endpoint, abortSignal: context.abortController.signal }),
 						onDone: {
-							target: "#placesMachine.idle",
+							target: "#tenantMachine.idle",
 							actions: assign({
 								data: (_, event) => event.data.data.data,
 							}),
 						},
 						onError: {
-							target: "#placesMachine.fetchingData.failed",
+							target: "#tenantMachine.fetchingData.failed",
 							actions: assign({
 								errorMessage: (_, event) => {
 									const error: AxiosError = event.data;
@@ -97,7 +97,7 @@ const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 					on: {
 						DELETE_START: "deleting",
 						CANCEL: {
-							target: "#placesMachine.idle",
+							target: "#tenantMachine.idle",
 							actions: assign({
 								selectedData: (_, event) => undefined,
 							}),
@@ -128,14 +128,14 @@ const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 				},
 				success: {
 					on: {
-						FETCH: "#placesMachine.fetchingData",
+						FETCH: "#tenantMachine.fetchingData",
 					},
 				},
 				failed: {
 					on: {
 						RETRY: "deleting",
 						CANCEL: {
-							target: "#placesMachine.idle",
+							target: "#tenantMachine.idle",
 							actions: assign({
 								selectedData: (_, event) => undefined,
 							}),
@@ -147,4 +147,4 @@ const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 	},
 });
 
-export default PlacesMachine;
+export default MeterMachine;

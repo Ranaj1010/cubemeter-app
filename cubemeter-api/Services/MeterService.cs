@@ -42,7 +42,7 @@ namespace cubemeter_api.Services
             }
         }
 
-        public async Task<Meter> GetAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.Where(expression).FirstAsync();
+        public async Task<Meter> GetAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.SingleOrDefaultAsync(expression);
 
         public async Task<List<Meter>> ListAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.Where(expression).ToListAsync();
       

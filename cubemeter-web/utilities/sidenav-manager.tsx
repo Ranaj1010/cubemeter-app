@@ -6,12 +6,12 @@ export const getDefaultActiveKey = (): string => localStorage.getItem(localStora
 
 const setDefaultActiveKey = (value: string) => localStorage.setItem(localStorageName, value);
 
-const useSideNavManager = (key: string) => {
-	const [activeKey, setActiveKey] = useState(key);
+const useSideNavManager = () => {
+	const [activeKey, setActiveKey] = useState("light");
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
-			setActiveKey(getDefaultActiveKey);
+			setActiveKey(getDefaultActiveKey());
 		}
 	}, []);
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { ThemeType } from "@/utilities/theme-manager";
 import { CSSProperties } from "react";
 import { Content } from "rsuite";

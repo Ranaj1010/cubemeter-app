@@ -212,19 +212,19 @@ const Page = () => {
 					formValue={locationDetailsFormValue}
 					model={locationDetailsModel}
 				>
-					<InputFormControl formLabel="Name" name="name" required placeHolder="Enter Name" />
+					<InputFormControl formlabel="Name" name="name" required placeholder="Enter Name" />
 					<SelectFormControl
 						data={timeZoneData}
 						name="timezone"
-						formLabel="Timezone"
-						placeHolder="Select timezone"
+						formlabel="Timezone"
+						placeholder="Select timezone"
 						required
 						searchable={true}
 					/>
-					<SelectFormControl formLabel="Country" name="country" placeHolder="Select Country" data={countriesData} searchable required />
-					<InputFormControl formLabel="Region" name="region" placeHolder="Enter Region" required />
-					<InputFormControl formLabel="City" name="city" placeHolder="Enter City" required />
-					<TextAreaFormControl formLabel="Address" name="address" placeHolder="Enter Address" required />
+					<SelectFormControl formlabel="Country" name="country" placeholder="Select Country" data={countriesData} searchable required />
+					<InputFormControl formlabel="Region" name="region" placeholder="Enter Region" required />
+					<InputFormControl formlabel="City" name="city" placeholder="Enter City" required />
+					<TextAreaFormControl formlabel="Address" name="address" placeholder="Enter Address" required />
 				</Form>
 			</Stack>
 
@@ -297,10 +297,10 @@ const Page = () => {
 				onCheck={setAdditionalInformationFormError}
 				formValue={additionalInformationFormValue}
 			>
-				<SelectFormControl name="currency" formLabel="Currency" placeHolder="Select Currency" data={currenciesData} searchable />
-				<SelectFormControl name="billingDay" formLabel="Billing day" placeHolder="Select Billing day" data={billingDayData} />
-				<InputFormControl name="serialNumber" formLabel="Serial No." placeHolder="Enter Serial Number" />
-				<InputNumberFormControl name="sortNumber" formLabel="Sort No." placeHolder="Entert Sort No." />
+				<SelectFormControl name="currency" formlabel="Currency" placeholder="Select Currency" data={currenciesData} searchable />
+				<SelectFormControl name="billingDay" formlabel="Billing day" placeholder="Select Billing day" data={billingDayData} />
+				<InputFormControl name="serialNumber" formlabel="Serial No." placeholder="Enter Serial Number" />
+				<InputNumberFormControl name="sortNumber" formlabel="Sort No." placeholder="Entert Sort No." />
 			</Form>
 		</Stack>
 	);

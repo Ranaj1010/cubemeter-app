@@ -2,7 +2,6 @@
 import IPlace from "@/models/place";
 import EditIcon from "@rsuite/icons/Edit";
 import DeleteIcon from "@rsuite/icons/Trash";
-import { useRouter } from "next/navigation";
 import { IconButton, Pagination, Stack, Table } from "rsuite";
 import { SortType } from "rsuite/esm/Table";
 const { Column, HeaderCell, Cell } = Table;
@@ -21,7 +20,6 @@ interface IPlaceTableProp {
 
 export const PlaceTableComponent = (props: IPlaceTableProp) => {
 	const { data, limit, page, onChangeLimit, onChangePage, sortColumn, onHandleDelete, onHandleEdit, sortType, onHandleSortColumn } = props;
-	const router = useRouter();
 
 	return (
 		<div>
