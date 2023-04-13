@@ -13,8 +13,8 @@ export enum IEntryModeEnum {
 
 interface ICommonFormControlProps {
 	name: string;
-	formLabel: string;
-	placeHolder?: string;
+	formlabel: string;
+	placeholder?: string;
 }
 
 //#region InputFormControl
@@ -25,19 +25,19 @@ interface IInputFormControlProps extends ICommonFormControlProps {
 	onChange?: (value: ValueType, event: SyntheticEvent) => void;
 }
 export const InputFormControl = (props: IInputFormControlProps) => {
-	const { required, name, rule, value, formLabel, onChange, placeHolder } = props;
+	const { required, name, rule, value, formlabel, onChange, placeholder } = props;
 	return (
 		<Form.Group controlId={name}>
 			<Form.ControlLabel>
 				{required ? (
-					<RequiredFieldLabelText text={formLabel} />
+					<RequiredFieldLabelText text={formlabel} />
 				) : (
 					<label>
-						{<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formLabel} /> : <label>{formLabel}</label>}</Form.ControlLabel>}
+						{<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formlabel} /> : <label>{formlabel}</label>}</Form.ControlLabel>}
 					</label>
 				)}
 			</Form.ControlLabel>
-			<Form.Control name={name} placeholder={placeHolder} rule={rule} value={value} onChange={onChange} />
+			<Form.Control name={name} placeholder={placeholder} rule={rule} value={value} onChange={onChange} />
 		</Form.Group>
 	);
 };
@@ -58,13 +58,13 @@ const SelectAccepter = forwardRef((props: SelectPickerProps<ISelectFormControl>,
 SelectAccepter.displayName = "select";
 
 export const SelectFormControl = (props: ISelectFormControl) => {
-	const { required, name, rule, value, formLabel, onChange, placeHolder, data, searchable } = props;
+	const { required, name, rule, value, formlabel, onChange, placeholder, data, searchable } = props;
 	return (
 		<Form.Group controlId={name}>
 			<Form.ControlLabel>
-				{required && required !== undefined ? <RequiredFieldLabelText text={formLabel} /> : <label>{formLabel}</label>}
+				{required && required !== undefined ? <RequiredFieldLabelText text={formlabel} /> : <label>{formlabel}</label>}
 			</Form.ControlLabel>
-			<Form.Control placeholder={placeHolder} {...props} rule={rule} onChange={onChange} accepter={SelectAccepter} />
+			<Form.Control placeholder={placeholder} {...props} rule={rule} onChange={onChange} accepter={SelectAccepter} />
 		</Form.Group>
 	);
 };
@@ -82,19 +82,19 @@ const TextAreaAccepter = forwardRef((props, ref: any) => <Input {...props} as="t
 TextAreaAccepter.displayName = "textarea";
 
 export const TextAreaFormControl = (props: ITextAreaProps) => {
-	const { required, name, rule, value, style, formLabel, onChange, placeHolder } = props;
+	const { required, name, rule, value, style, formlabel, onChange, placeholder } = props;
 
 	return (
 		<Form.Group controlId={name}>
 			<Form.ControlLabel>
-				<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formLabel} /> : <label>{formLabel}</label>}</Form.ControlLabel>
+				<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formlabel} /> : <label>{formlabel}</label>}</Form.ControlLabel>
 			</Form.ControlLabel>
 			<Form.Control
 				name={name}
 				aria-multiline="true"
 				as="address"
 				accepter={TextAreaAccepter}
-				placeholder={placeHolder}
+				placeholder={placeholder}
 				rule={rule}
 				value={value}
 				onChange={onChange}
@@ -116,11 +116,11 @@ const InputNumberAccepter = forwardRef((props, ref: any) => <InputNumber {...pro
 InputNumberAccepter.displayName = "in";
 
 export const InputNumberFormControl = (props: IInputNumberFormControlProps) => {
-	const { required, name, rule, value, style, formLabel, onChange, placeHolder } = props;
+	const { required, name, rule, value, style, formlabel, onChange, placeholder } = props;
 
 	return (
 		<Form.Group controlId={name}>
-			<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formLabel} /> : <label>{formLabel}</label>}</Form.ControlLabel>
+			<Form.ControlLabel>{required ? <RequiredFieldLabelText text={formlabel} /> : <label>{formlabel}</label>}</Form.ControlLabel>
 			<Form.Control name={name} accepter={InputNumberAccepter} value={value} onChange={onChange} rule={rule} />
 		</Form.Group>
 	);

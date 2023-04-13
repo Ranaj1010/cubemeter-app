@@ -9,6 +9,7 @@ interface IMeter extends IBaseModel {
 	ratio: string;
 	remarks: string;
 	sortNumber: number;
+	serialNumber: string;
 }
 
 export default IMeter;

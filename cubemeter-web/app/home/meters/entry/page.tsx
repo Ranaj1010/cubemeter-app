@@ -3,31 +3,35 @@
 import { BreadCrumbComponent } from "@/components/breadcrumbs";
 import { InputFormControl, InputNumberFormControl, SelectFormControl, TextAreaFormControl } from "@/components/form-controls";
 import { ErrorNotification, FailedNotification, SuccessNotification } from "@/components/notifications";
+import IMeter from "@/models/meter";
 import IPlace from "@/models/place";
-import ITenant from "@/models/tenant";
+import { IMeterTypeEnums, IMeterUploadTypeEnums } from "@/utilities/enums";
 import PageNextIcon from "@rsuite/icons/PageNext";
 import { useMachine } from "@xstate/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { Ref, useEffect, useRef, useState } from "react";
 import { BreadcrumbItemProps, Form, FormInstance, IconButton, Schema, Stack, useToaster } from "rsuite";
-import { gatewayRule, nameRule, placeIdRule, serialNumberRule, unitIdRule } from "./form-rules";
-import TenantEntry from "./machine";
+import { ctRatioTypeData, meterTypeData, meterUploadTypeData } from "./data";
+import { meterTypeRule, meterUploadTypeRule, nameRule, ratioRule, serialNumberRule, tenantIdRule } from "./form-rules";
+import MeterEntryMachine from "./machine";
 
 interface IFormProp {
 	name: string;
-	placeId: string;
-	unitId: string;
-	serialNumber: string;
-	gateway: string;
+	tenantId: string;
+	meterType: IMeterTypeEnums;
+	meterUploadType: IMeterUploadTypeEnums;
+	ratio: string;
 	remarks: string;
+	sortNumber: number;
+	serialNumber: string;
 }
 
 const Page = () => {
 	const params = useSearchParams();
 	const router = useRouter();
 	//#region  machine
-	const [current, send] = useMachine(TenantEntry);
+	const [current, send] = useMachine(MeterEntryMachine);
 	//#endregion
 
 	//#region toaster
@@ -41,29 +45,32 @@ const Page = () => {
 			href: "/home/dashboard",
 		},
 		{
-			title: "Tenants",
-			href: "/home/tenants",
+			title: "Meters",
+			href: "/home/meters",
 		},
 		{
-			title: current.matches("create") ? "Create New Tenant" : "Update Tenant",
+			title: current.matches("create") ? "Create New Meter" : "Update Meter",
 			active: true,
 		},
 	];
 
 	const initialValue: IFormProp = {
 		name: "",
-		placeId: "",
-		unitId: "",
-		serialNumber: "",
-		gateway: "",
+		tenantId: "",
+		meterType: IMeterTypeEnums.SinglePhase,
+		meterUploadType: IMeterUploadTypeEnums.IMeter,
+		ratio: "Default",
 		remarks: "",
+		sortNumber: 0,
+		serialNumber: "",
 	};
 	const model = Schema.Model({
 		name: nameRule,
-		placeId: placeIdRule,
-		unitId: unitIdRule,
+		tenantId: tenantIdRule,
+		meterType: meterTypeRule,
+		meterUploadType: meterUploadTypeRule,
+		ratio: ratioRule,
 		serialNumber: serialNumberRule,
-		gateway: gatewayRule,
 	});
 	const formRef = useRef<any>();
 	const [formError, setFormError] = useState({});
@@ -79,16 +86,18 @@ const Page = () => {
 			return;
 		}
 
-		const tenant: ITenant = {
+		const tenant: IMeter = {
 			id: current.context.payload?.id,
 			name: formValue.name,
-			gateway: formValue.gateway,
-			placeId: Number.parseInt(formValue.placeId),
-			dateRegistered: current.context.payload?.dateRegistered!,
+			meterType: formValue.meterType,
+			meterUploadType: formValue.meterUploadType,
+			tenantId: Number.parseInt(formValue.tenantId),
 			remarks: formValue.remarks,
 			serialNumber: formValue.serialNumber,
-			unitId: Number.parseInt(formValue.unitId),
+			ratio: formValue.ratio,
+			sortNumber: formValue.sortNumber,
 		};
+
 		send({ type: "SUBMIT", payload: tenant });
 	};
 
@@ -135,11 +144,13 @@ const Page = () => {
 		if (current.matches("update.encoding") && current.context.payload) {
 			setFormValue({
 				name: current.context.payload?.name ?? "",
-				placeId: current.context.payload?.placeId.toString() ?? "",
-				unitId: current.context.payload?.unitId.toString() ?? "",
+				tenantId: current.context.payload?.tenantId.toString() ?? "",
+				meterType: current.context.payload?.meterType ?? IMeterTypeEnums.SinglePhase,
+				meterUploadType: current.context.payload?.meterUploadType ?? IMeterUploadTypeEnums.IMeter,
 				serialNumber: current.context.payload?.serialNumber ?? "",
-				gateway: current.context.payload?.gateway ?? "",
+				ratio: current.context.payload?.ratio ?? "",
 				remarks: current.context.payload?.remarks ?? "",
+				sortNumber: current.context.payload?.sortNumber ?? 0,
 			});
 		}
 
@@ -162,7 +173,7 @@ const Page = () => {
 	return (
 		<Stack direction="column" spacing={20} alignItems="stretch">
 			<BreadCrumbComponent
-				currentTitle={current.matches("create") ? "Create New Tenant" : "Update Tenant"}
+				currentTitle={current.matches("create") ? "Create New Meter" : "Update Meter"}
 				breadCrumbs={entryPlaceBreadCrumbProps}
 			/>
 			<Stack direction="column" spacing={30} alignItems="flex-start">
@@ -176,19 +187,28 @@ const Page = () => {
 				>
 					<InputFormControl name="name" formlabel="Name" required placeholder="Enter Name" />
 					<SelectFormControl
-						name="placeId"
-						formlabel="Place"
-						placeholder="Select Place"
-						data={current.context.places.map((item: IPlace) => ({
+						name="tenantId"
+						formlabel="Tenant"
+						placeholder="Select Tenant"
+						data={current.context.tenants.map((item: IPlace) => ({
 							label: item.name,
 							value: item.id?.toString(),
 						}))}
 						searchable
 						required
 					/>
-					<InputNumberFormControl name="unitId" formlabel="Unit Id" placeholder="Entert Unit Id" required />
-					<InputFormControl name="gateway" formlabel="Gateway" placeholder="Enter Gateway Number" required />
+					<SelectFormControl name="meterType" formlabel="Type" placeholder="Select Type" data={meterTypeData} searchable required />
+					<SelectFormControl
+						name="meterUploadType"
+						formlabel="Upload Type"
+						placeholder="Select Upload Type"
+						data={meterUploadTypeData}
+						searchable
+						required
+					/>
+					<SelectFormControl name="ratio" formlabel="CT Ratio" placeholder="Select Upload Type" data={ctRatioTypeData} required />
 					<InputFormControl name="serialNumber" formlabel="Serial No." placeholder="Enter Serial Number" required />
+					<InputNumberFormControl name="sortNumber" formlabel="Sort No." placeholder="Enter Sort No." />
 					<TextAreaFormControl name="remarks" formlabel="Remarks" placeholder="Enter Remarks" />
 				</Form>
 			</Stack>
@@ -218,12 +238,12 @@ const Page = () => {
 				)}
 
 				{current.matches("create.succeeded") && (
-					<IconButton icon={<PageNextIcon />} placement="right" appearance="primary" onClick={() => router.push("home/tenants")}>
+					<IconButton icon={<PageNextIcon />} placement="right" appearance="primary" onClick={() => router.push("/home/meters")}>
 						Done
 					</IconButton>
 				)}
 				{current.matches("update.succeeded") && (
-					<IconButton icon={<PageNextIcon />} placement="right" appearance="primary" onClick={() => router.push("home/tenants")}>
+					<IconButton icon={<PageNextIcon />} placement="right" appearance="primary" onClick={() => router.push("/home/meters")}>
 						Done
 					</IconButton>
 				)}

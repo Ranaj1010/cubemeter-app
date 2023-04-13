@@ -1,7 +1,6 @@
 namespace cubemeter_api.DTOs.Meter.Incoming
 {
-    public class UpdateMeterRequest
+    public class UpdateMeterRequest : MeterDto
     {
-        public MeterDto Data { get; set; }
     }
 }

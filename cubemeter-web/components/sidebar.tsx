@@ -1,6 +1,6 @@
 "use client";
 
-import useSideNavManager, { getDefaultActiveKey } from "@/utilities/sidenav-manager";
+import useSideNavManager from "@/utilities/sidenav-manager";
 import { Icon } from "@rsuite/icons";
 import ArrowLeftLineIcon from "@rsuite/icons/ArrowLeftLine";
 import ArrowRightLineIcon from "@rsuite/icons/ArrowRightLine";
@@ -26,18 +26,14 @@ interface ISidebarProps {
 
 const SideBarComponent = (props: ISidebarProps) => {
 	const { sideNavKey } = props;
-	const [activeKey, setActiveKey] = useSideNavManager(getDefaultActiveKey());
+	const [activeKey, setActiveKey] = useSideNavManager();
 	const [openKeys, setOpenKeys] = useState(["overview"]);
 	const [expanded, setExpand] = useState(true);
 	const router = useRouter();
 	const pathName = usePathname();
 
 	useEffect(() => {
-		setActiveKey(sideNavKey);
-	}, [sideNavKey]);
-
-	useEffect(() => {
-		var foundLinkFromSearch = searchData.find((query) => query.link === pathName);
+		let foundLinkFromSearch = searchData.find((query) => query.link === pathName);
 		if (foundLinkFromSearch) {
 			router.push(foundLinkFromSearch.link);
 			setActiveKey(foundLinkFromSearch.sideNavKey);
@@ -50,18 +46,11 @@ const SideBarComponent = (props: ISidebarProps) => {
 
 	return (
 		<Sidebar style={{ display: "flex", flexDirection: "column" }} width={expanded ? 260 : 56} collapsible>
-			<Sidenav
-				activeKey={activeKey}
-				openKeys={openKeys}
-				expanded={expanded}
-				onOpenChange={setOpenKeys}
-				defaultOpenKeys={openKeys}
-				appearance="subtle"
-			>
+			<Sidenav openKeys={openKeys} expanded={expanded} onOpenChange={setOpenKeys} defaultOpenKeys={openKeys} appearance="subtle">
 				<SideNavHeader expanded={expanded} />
 				<Sidenav.Body>
-					<Nav onSelect={handleSetActive} vertical>
-						<Nav.Menu eventKey="overview" active icon={<DashboardIcon />} title="Overview" collapsible expanded>
+					<Nav onSelect={handleSetActive} activeKey={activeKey} vertical>
+						<Nav.Menu eventKey="overview" icon={<DashboardIcon />} title="Overview" collapsible expanded>
 							<Nav.Item eventKey="dashboard" onClick={() => router.push("/home/dashboard")}>
 								Dashboard
 							</Nav.Item>

@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 const localStorageName = "theme";
 export type ThemeType = "dark" | "light" | "high-contrast";
 
-export const getDefaultTheme = (): ThemeType => localStorage.getItem(localStorageName) as ThemeType;
+export const getDefaultTheme = (): ThemeType => {
+	return typeof window !== "undefined" ? (localStorage.getItem(localStorageName) as ThemeType) : "light";
+};
 
 const setDefaultTheme = (value: ThemeType) => localStorage.setItem(localStorageName, value);
 
@@ -14,7 +16,7 @@ const useThemeManager = (themeType: ThemeType) => {
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
-			setTheme(getDefaultTheme);
+			setTheme(getDefaultTheme());
 		}
 	}, []);
 
