@@ -1,14 +1,14 @@
-import IMeter from "@/models/meter";
+import IPlace from "@/models/place";
 import { DELETE, GET } from "@/utilities/http-services";
 import { AxiosError } from "axios";
 import { Machine, assign } from "xstate";
 
 interface IContextProps {
-	data: IMeter[];
-	selectedData?: IMeter;
+	data: IPlace[];
+	selectedData?: IPlace;
 	endpoint: string;
-	abortController: AbortController;
 	errorMessage: string;
+	abortController: AbortController;
 }
 
 interface IStates {
@@ -31,7 +31,7 @@ interface IStates {
 	};
 }
 
-type ITypes = { type: "FETCH" } | { type: "RETRY" } | { type: "CANCEL" } | { type: "DELETE"; place: IMeter } | { type: "DELETE_START" };
+type ITypes = { type: "FETCH" } | { type: "RETRY" } | { type: "CANCEL" } | { type: "DELETE"; place: IPlace } | { type: "DELETE_START" };
 
 const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 	id: "placesMachine",
