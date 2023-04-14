@@ -60,10 +60,13 @@ const Page = () => {
 
 	useEffect(() => {
 		if (current.matches("delete.success")) {
-			toaster.push(<SuccessNotification title="Success" message="Meter has been successfully deleted." />, {
-				duration: 3000,
-				placement: placement,
-			});
+			toaster.push(
+				<SuccessNotification title="Success" message="Meter has been successfully deleted." onCloseNotification={() => toaster.clear()} />,
+				{
+					duration: 3000,
+					placement: placement,
+				}
+			);
 			send("FETCH");
 		}
 		if (current.matches("delete.failed")) {
@@ -88,7 +91,7 @@ const Page = () => {
 	const renderDeletePrompt = (
 		<Stack>
 			<label>
-				Are you sure you want to delete this tenant: <b>{current.context.selectedData?.name}</b>?
+				Are you sure you want to delete this meter: <b>{current.context.selectedData?.name}</b>?
 			</label>
 		</Stack>
 	);

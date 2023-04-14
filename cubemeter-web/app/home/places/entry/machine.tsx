@@ -81,7 +81,7 @@ const AddPlaceMachine = Machine<IContextProps, IStates, ITypes>({
 				creating: {
 					invoke: {
 						src: (context) => POST({ endpoint: context.endpoint, abortSignal: context.abortController.signal, body: context.payload }),
-						onDone: "#addPlaceMachine.create.encoding",
+						onDone: "#addPlaceMachine.create.succeeded",
 						onError: {
 							target: "#addPlaceMachine.create.failed",
 							actions: assign({

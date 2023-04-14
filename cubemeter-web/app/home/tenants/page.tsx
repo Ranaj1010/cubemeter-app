@@ -60,10 +60,13 @@ const Page = () => {
 
 	useEffect(() => {
 		if (current.matches("delete.success")) {
-			toaster.push(<SuccessNotification title="Success" message="Tenant has been successfully deleted." />, {
-				duration: 3000,
-				placement: placement,
-			});
+			toaster.push(
+				<SuccessNotification title="Success" message="Tenant has been successfully deleted." onCloseNotification={() => toaster.clear()} />,
+				{
+					duration: 3000,
+					placement: placement,
+				}
+			);
 			send("FETCH");
 		}
 		if (current.matches("delete.failed")) {

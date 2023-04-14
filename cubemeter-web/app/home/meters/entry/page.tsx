@@ -110,13 +110,10 @@ const Page = () => {
 	//#region Notification Observable
 	useEffect(() => {
 		if (current.matches("create.succeeded")) {
-			toaster.push(
-				<SuccessNotification title="Success" message="Tenant has been created successfully." onCloseNotification={onHandleReset} />,
-				{
-					duration: 3000,
-					placement: placement,
-				}
-			);
+			toaster.push(<SuccessNotification title="Success" message="Meter has been created successfully." onCloseNotification={onHandleReset} />, {
+				duration: 3000,
+				placement: placement,
+			});
 		}
 		if (current.matches("create.failed")) {
 			toaster.push(<FailedNotification title="Failed" message={current.context.errorMessage} onRetry={onHandleRetry} />, {
@@ -126,13 +123,10 @@ const Page = () => {
 		}
 
 		if (current.matches("update.succeeded")) {
-			toaster.push(
-				<SuccessNotification title="Success" message="Tenant has been updated successfully." onCloseNotification={onHandleReset} />,
-				{
-					duration: 3000,
-					placement: placement,
-				}
-			);
+			toaster.push(<SuccessNotification title="Success" message="Meter has been updated successfully." onCloseNotification={onHandleReset} />, {
+				duration: 3000,
+				placement: placement,
+			});
 		}
 		if (current.matches("update.failed")) {
 			toaster.push(<FailedNotification title="Failed" message={current.context.errorMessage} onRetry={onHandleRetry} />, {
@@ -188,8 +182,8 @@ const Page = () => {
 					<InputFormControl name="name" formlabel="Name" required placeholder="Enter Name" />
 					<SelectFormControl
 						name="tenantId"
-						formlabel="Tenant"
-						placeholder="Select Tenant"
+						formlabel="Meter"
+						placeholder="Select Meter"
 						data={current.context.tenants.map((item: IPlace) => ({
 							label: item.name,
 							value: item.id?.toString(),
