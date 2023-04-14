@@ -61,7 +61,7 @@ const MeterEntryMachine = Machine<IContextProps, IStates, ITypes>({
 	initial: "create",
 	context: {
 		mode: IEntryModeEnum.create,
-		endpoint: "/meter",
+		endpoint: "/api/v1/meter",
 		errorMessage: "",
 		hasError: false,
 		hasIncompleteFields: true,
@@ -77,7 +77,7 @@ const MeterEntryMachine = Machine<IContextProps, IStates, ITypes>({
 			states: {
 				getTenants: {
 					invoke: {
-						src: (context) => GET({ endpoint: "/tenant", abortSignal: context.abortController.signal }),
+						src: (context) => GET({ endpoint: "/api/v1/tenant", abortSignal: context.abortController.signal }),
 						onDone: {
 							target: "#meterEntryMachine.create.encoding",
 							actions: assign({
@@ -183,7 +183,7 @@ const MeterEntryMachine = Machine<IContextProps, IStates, ITypes>({
 			states: {
 				getTenants: {
 					invoke: {
-						src: (context) => GET({ endpoint: "/tenant", abortSignal: context.abortController.signal }),
+						src: (context) => GET({ endpoint: "/api/v1/tenant", abortSignal: context.abortController.signal }),
 						onDone: {
 							target: "#meterEntryMachine.update.retrieveDataById",
 							actions: assign({

@@ -1,4 +1,5 @@
 using cubemeter_api.Base;
+using cubemeter_api.DTOs.Tenant;
 using cubemeter_api.Utilities;
 
 namespace cubemeter_api.DTOs.Meter
@@ -13,5 +14,7 @@ namespace cubemeter_api.DTOs.Meter
         public string Ratio { get; set; }
         public string Remarks { get; set; }
         public int SortNumber { get; set; }
+
+        public virtual TenantDto? Tenant { get; set; }
     }
 }

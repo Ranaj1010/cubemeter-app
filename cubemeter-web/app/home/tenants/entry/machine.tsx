@@ -61,7 +61,7 @@ const TenantEntry = Machine<IContextProps, IStates, ITypes>({
 	initial: "create",
 	context: {
 		mode: IEntryModeEnum.create,
-		endpoint: "/tenant",
+		endpoint: "/api/v1/tenant",
 		errorMessage: "",
 		hasError: false,
 		hasIncompleteFields: true,
@@ -77,7 +77,7 @@ const TenantEntry = Machine<IContextProps, IStates, ITypes>({
 			states: {
 				getPlaces: {
 					invoke: {
-						src: (context) => GET({ endpoint: "/place", abortSignal: context.abortController.signal }),
+						src: (context) => GET({ endpoint: "/api/v1/place", abortSignal: context.abortController.signal }),
 						onDone: {
 							target: "#tenantEntryMachine.create.encoding",
 							actions: assign({
@@ -183,7 +183,7 @@ const TenantEntry = Machine<IContextProps, IStates, ITypes>({
 			states: {
 				getPlaces: {
 					invoke: {
-						src: (context) => GET({ endpoint: "/place", abortSignal: context.abortController.signal }),
+						src: (context) => GET({ endpoint: "/api/v1/place", abortSignal: context.abortController.signal }),
 						onDone: {
 							target: "#tenantEntryMachine.update.retrieveDataById",
 							actions: assign({

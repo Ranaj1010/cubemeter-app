@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace cubemeter_api.Controllers
 {
     [ApiController]
-    [Route("tenant")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/tenant")]
     public class TenantController : ControllerBase
     {
         private readonly string _name = "Tenant";
@@ -30,8 +31,9 @@ namespace cubemeter_api.Controllers
 
             var response = new GetTenantsResponse
             {
-                Message = data.Count > 0 ? $"{data.Count} {(data.Count > 1 ? _name : _names)} found." : $"No {_names} found.",
+                Message = data.Count > 0 ? data.Count > 1 ? $"{data.Count} {_names} found." : $"{data.Count} {_name} found." : $"No {_name} found.",
                 Data = _mapper.Map<List<TenantDto>>(data).OrderBy(e => e.Id).ToList()
+            
             };
             return Ok(response);
         }

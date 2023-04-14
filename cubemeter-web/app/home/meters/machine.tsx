@@ -38,7 +38,7 @@ const MeterMachine = Machine<IContextProps, IStates, ITypes>({
 	initial: "fetchingData",
 	context: {
 		data: [],
-		endpoint: "/meter",
+		endpoint: "/api/v1/meter",
 		errorMessage: "",
 		abortController: new AbortController(),
 	},

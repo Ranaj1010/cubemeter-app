@@ -9,8 +9,10 @@ using NetTopologySuite;
 
 namespace cubemeter_api.Controllers
 {
+
     [ApiController]
-    [Route("place")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/place")]
     public class PlaceController : ControllerBase
     {
         private readonly string _name = "Place";
@@ -31,7 +33,7 @@ namespace cubemeter_api.Controllers
 
             var response = new GetPlacesResponse
             {
-                Message = data.Count > 1 ? $"{data.Count} {_names} found." : $"No {_names} found.",
+                Message = data.Count > 0 ? data.Count > 1 ? $"{data.Count} {_names} found." : $"{data.Count} {_name} found." : $"No {_name} found.",
                 Data = _mapper.Map<List<PlaceDto>>(data).OrderBy(e => e.Id).ToList()
             };
             return Ok(response);

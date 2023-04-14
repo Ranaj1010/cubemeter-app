@@ -38,7 +38,7 @@ const TenantMachine = Machine<IContextProps, IStates, ITypes>({
 	initial: "fetchingData",
 	context: {
 		data: [],
-		endpoint: "/tenant",
+		endpoint: "/api/v1/tenant",
 		errorMessage: "",
 		abortController: new AbortController(),
 	},

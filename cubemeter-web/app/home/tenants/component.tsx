@@ -29,9 +29,13 @@ export const TenantTableComponent = (props: ITenantTableProp) => {
 					<Cell dataKey="name" />
 				</Column>
 
-				<Column width={100}>
+				<Column width={200}>
 					<HeaderCell>Unit Id</HeaderCell>
 					<Cell dataKey="unitId" />
+				</Column>
+				<Column width={200}>
+					<HeaderCell>Gateway</HeaderCell>
+					<Cell dataKey="gateway" />
 				</Column>
 				<Column width={200}>
 					<HeaderCell>Serial No.</HeaderCell>

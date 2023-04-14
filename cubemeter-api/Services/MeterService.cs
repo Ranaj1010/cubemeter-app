@@ -22,7 +22,7 @@ namespace cubemeter_api.Services
 
         public async Task<bool> DeleteAsync(long id)
         {
-           try
+            try
             {
                 var existingData = await _dbContext.Meters.SingleOrDefaultAsync(result => result.Id.Equals(id));
 
@@ -45,7 +45,25 @@ namespace cubemeter_api.Services
         public async Task<Meter> GetAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.SingleOrDefaultAsync(expression);
 
         public async Task<List<Meter>> ListAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.Where(expression).ToListAsync();
-      
+
+        public async Task<List<Meter>> ListWithTenantAsync()
+        {
+            return await _dbContext.Meters.Where(meter => meter.Active).Join(_dbContext.Tenants, meter => meter.TenantId, tenant => tenant.Id, (meter, tenant) => new Meter
+            {
+                Id = meter.Id,
+                Name = meter.Name,
+                MeterType = meter.MeterType,
+                MeterUploadType = meter.MeterUploadType,
+                Ratio = meter.Ratio,
+                SerialNumber = meter.SerialNumber,
+                SortNumber = meter.SortNumber,
+                TenantId = meter.TenantId,
+                Tenant = tenant,
+                Active = meter.Active,
+                Remarks = meter.Remarks
+            }).ToListAsync();
+        }
+
         public async Task<bool> UpdateAsync(Meter entity)
         {
             try
