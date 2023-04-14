@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace cubemeter_api.Controllers
 {
+
     [ApiController]
-    [Route("meter")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/meter")]
     public class MeterController : ControllerBase
     {
         private readonly string _name = "Meter";
@@ -30,7 +32,7 @@ namespace cubemeter_api.Controllers
 
             var response = new GetMetersResponse
             {
-                Message = data.Count > 1 ? $"{data.Count} {_names} found." : $"No {_names} found.",
+                Message = data.Count > 0 ? data.Count > 1 ? $"{data.Count} {_names} found." : $"{data.Count} {_name} found." : $"No {_name} found.",
                 Data = _mapper.Map<List<MeterDto>>(data).OrderBy(e => e.Id).ToList()
             };
             return Ok(response);

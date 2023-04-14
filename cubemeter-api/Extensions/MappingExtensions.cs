@@ -16,6 +16,7 @@ namespace cubemeter_api.Utilities
     {
         public MappingExtensions()
         {
+            #region Places
             CreateMap<Place, PlaceDto>().AfterMap((src, dest) =>
             {
                 dest.Latitude = src.MapCoordinates.Y;
@@ -38,15 +39,21 @@ namespace cubemeter_api.Utilities
                 var location = geometryFactory.CreatePoint(new NetTopologySuite.Geometries.Coordinate(src.Longitude, src.Latitude));
                 dest.MapCoordinates = location;
             });
+            #endregion
             
+            #region Tenants
             CreateMap<AddTenantRequest, Tenant>();
             CreateMap<Tenant, AddTenantResponse>();
             CreateMap<Tenant, TenantDto>().ReverseMap();
+            #endregion
 
+
+            #region Meters
             CreateMap<AddMeterRequest, Meter>();
             CreateMap<Meter, AddMeterResponse>();
             CreateMap<UpdateMeterRequest, Meter>();
             CreateMap<Meter, MeterDto>().ReverseMap();
+            #endregion
         }
     }
 }

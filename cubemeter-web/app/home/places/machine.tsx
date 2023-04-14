@@ -38,7 +38,7 @@ const PlacesMachine = Machine<IContextProps, IStates, ITypes>({
 	initial: "fetchingData",
 	context: {
 		data: [],
-		endpoint: "/place",
+		endpoint: "/api/v1/place",
 		errorMessage: "",
 		abortController: new AbortController(),
 	},

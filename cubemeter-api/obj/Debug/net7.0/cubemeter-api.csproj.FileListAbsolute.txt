@@ -55,3 +55,6 @@
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Newtonsoft.Json.dll
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Npgsql.EntityFrameworkCore.PostgreSQL.Design.dll
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Npgsql.GeoJSON.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Microsoft.AspNetCore.Mvc.Versioning.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Annotations.dll

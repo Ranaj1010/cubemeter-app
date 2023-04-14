@@ -56,7 +56,7 @@ const AddPlaceMachine = Machine<IContextProps, IStates, ITypes>({
 	initial: "create",
 	context: {
 		mode: IEntryModeEnum.create,
-		endpoint: "/place",
+		endpoint: "/api/v1/place",
 		errorMessage: "",
 		hasError: false,
 		hasIncompleteFields: true,

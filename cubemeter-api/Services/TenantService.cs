@@ -88,6 +88,7 @@ namespace cubemeter_api.Services
                 existingData.Remarks = entity.Remarks;
                 existingData.SerialNumber = entity.SerialNumber;
                 existingData.UnitId = entity.UnitId;
+                existingData.Gateway = entity.Gateway;
 
                 _dbContext.Tenants.Update(existingData);
 

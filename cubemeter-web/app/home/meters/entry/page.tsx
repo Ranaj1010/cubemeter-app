@@ -182,8 +182,8 @@ const Page = () => {
 					<InputFormControl name="name" formlabel="Name" required placeholder="Enter Name" />
 					<SelectFormControl
 						name="tenantId"
-						formlabel="Meter"
-						placeholder="Select Meter"
+						formlabel="Tenant"
+						placeholder="Select Tenant"
 						data={current.context.tenants.map((item: IPlace) => ({
 							label: item.name,
 							value: item.id?.toString(),
