@@ -35,6 +35,12 @@ namespace cubemeter_api.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTime>("ArchivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("MeterType")
                         .HasColumnType("integer");
 
@@ -70,6 +76,52 @@ namespace cubemeter_api.Migrations
                     b.ToTable("Meters");
                 });
 
+            modelBuilder.Entity("cubemeter_api.Entities.MeterReading", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ArchivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("CurrentConsumption")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("CurrentReading")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("MeterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Multi")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PercentageDifference")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PreviousConsumption")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PreviousReading")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("TenantId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeterReadings");
+                });
+
             modelBuilder.Entity("cubemeter_api.Entities.Place", b =>
                 {
                     b.Property<long>("Id")
@@ -85,6 +137,9 @@ namespace cubemeter_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("ArchivedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("BillingDay")
                         .HasColumnType("integer");
 
@@ -95,6 +150,9 @@ namespace cubemeter_api.Migrations
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -128,6 +186,52 @@ namespace cubemeter_api.Migrations
                     b.ToTable("Places");
                 });
 
+            modelBuilder.Entity("cubemeter_api.Entities.RawMeterReading", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ArchivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Current")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Gateway")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Kilowatt")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Kilowatthour")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("MeterName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Topic")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Voltage")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RawMeterReadings");
+                });
+
             modelBuilder.Entity("cubemeter_api.Entities.Tenant", b =>
                 {
                     b.Property<long>("Id")
@@ -138,6 +242,16 @@ namespace cubemeter_api.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ArchivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("BuildingNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("timestamp with time zone");

@@ -48,6 +48,22 @@
               "target": "Package",
               "version": "[12.0.0, )"
             },
+            "CronScheduler.AspNetCore": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "CronScheduler.Extensions": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "MQTTnet": {
+              "target": "Package",
+              "version": "[4.2.0.706, )"
+            },
+            "MQTTnet.Extensions.WebSocket4Net": {
+              "target": "Package",
+              "version": "[4.2.0.706, )"
+            },
             "Microsoft.AspNetCore.Mvc.Versioning": {
               "target": "Package",
               "version": "[5.0.0, )"

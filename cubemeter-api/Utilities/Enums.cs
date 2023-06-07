@@ -3,7 +3,10 @@ namespace cubemeter_api.Utilities
     public enum MeterTypeEnums
     {
         SinglePhase,
-        ThreePhase
+        ThreePhase,
+        PRA1,
+        PRA2,
+        PRA3
     }
     
     public enum MeterUploadTypeEnums

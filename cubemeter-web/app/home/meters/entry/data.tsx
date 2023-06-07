@@ -12,6 +12,18 @@ export const meterTypeData: ItemDataType[] = [
 		label: "Three Single Phase",
 		value: IMeterTypeEnums.ThreePhase,
 	},
+	{
+		label: "PRA1",
+		value: IMeterTypeEnums.PRA1,
+	},
+	{
+		label: "PRA2",
+		value: IMeterTypeEnums.PRA2,
+	},
+	{
+		label: "PRA3",
+		value: IMeterTypeEnums.PRA3,
+	},
 ];
 
 export const meterUploadTypeData: ItemDataType[] = [

@@ -58,3 +58,13 @@
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Microsoft.AspNetCore.Mvc.Versioning.dll
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
 /Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Swashbuckle.AspNetCore.Annotations.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/MQTTnet.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/MQTTnet.Extensions.WebSocket4Net.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/SuperSocket.ClientEngine.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/WebSocket4Net.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Bet.Extensions.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Bet.Extensions.Options.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/Cronos.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/CronScheduler.AspNetCore.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/CronScheduler.Extensions.dll
+/Users/evemichaeljaysonselmo/Documents/cubeworks/cubemeter-app/cubemeter-api/bin/Debug/net7.0/sample.json

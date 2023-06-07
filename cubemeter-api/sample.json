@@ -1,0 +1,21 @@
+{
+	"name": "2",
+	"tenantId": 8,
+	"serialNumber": "EFE830453",
+	"meterType": 0,
+	"meterUploadType": 1,
+	"ratio": "Default",
+	"remarks": "Sample Test agin",
+	"sortNumber": 2,
+	"tenant": {
+		"name": "PM_DEMO 7",
+		"placeId": 10,
+		"unitId": 2,
+		"serialNumber": "SDAFSD",
+		"dateRegistered": "2023-04-11T18:03:24.520922Z",
+		"gateway": "192.168.1.3",
+		"remarks": "Sample Remarks",
+		"id": 8
+	},
+	"id": 3
+}

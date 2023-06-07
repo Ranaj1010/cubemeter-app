@@ -1,9 +1,11 @@
 using AutoMapper;
 using cubemeter_api.Base;
 using cubemeter_api.DTOs.Gateway.V1;
+using cubemeter_api.DTOs.Gateway.V1.Incoming;
 using cubemeter_api.DTOs.Meter;
 using cubemeter_api.DTOs.Meter.Outgoing;
 using cubemeter_api.Interfaces;
+using cubemeter_api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -17,13 +19,15 @@ namespace cubemeter_api.Controllers
         private readonly IMeterService _meterService;
         private readonly IPlaceService _placeService;
         private readonly ITenantService _tenantService;
+        private readonly IMqttClientService _mqttService;
         private readonly IMapper _mapper;
-        public GatewayVersionOneController(IMeterService meterService, IPlaceService placeService, ITenantService tenantService, IMapper mapper)
+        public GatewayVersionOneController(IMeterService meterService, IPlaceService placeService, ITenantService tenantService, IMqttClientService mqttService, IMapper mapper)
         {
             _placeService = placeService;
             _tenantService = tenantService;
             _meterService = meterService;
             _mapper = mapper;
+            _mqttService = mqttService;
         }
 
         [HttpGet("meters/registered")]
@@ -43,5 +47,6 @@ namespace cubemeter_api.Controllers
 
             return Ok(response);
         }
+
     }
 }
