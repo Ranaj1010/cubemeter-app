@@ -13,11 +13,16 @@ namespace cubemeter_api.Data
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<Place> Places { get; set; }
         public DbSet<Meter> Meters { get; set; }
+        public DbSet<RawMeterReading> RawMeterReadings { get; set; }
+        public DbSet<MeterReading> MeterReadings { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=cubemeter_db;Username=postgres;Password=Baba101095", x => x.UseNetTopologySuite());
+            => optionsBuilder.UseNpgsql("Host=localhost;Database=cubemeter_db;Username=postgres;Password=Baba101095", x =>
+            {
+                x.UseNetTopologySuite();
+            }
+    );
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseSerialColumns();
             modelBuilder.HasPostgresExtension("postgis");
         }
     }

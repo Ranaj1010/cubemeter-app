@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using cubemeter_api.Configurations;
 using cubemeter_api.Data;
@@ -8,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using MQTTnet;
+using MQTTnet.Client;
+
 
 namespace cubemeter_api.Extensions
 {
@@ -28,8 +32,9 @@ namespace cubemeter_api.Extensions
                setup.SubstituteApiVersionInUrl = true;
            });
 
-        
-            services.AddSwaggerGen(c => {
+
+            services.AddSwaggerGen(c =>
+            {
                 c.EnableAnnotations();
             });
             services.ConfigureOptions<ConfigureSwaggerOptions>();
@@ -42,9 +47,29 @@ namespace cubemeter_api.Extensions
 
         public static void ConfigureDependencyInjection(this IServiceCollection services)
         {
+            services.AddHostedService<MqttClientService>();
+            services.AddSingleton<MqttFactory>(s => new MqttFactory());
+            services.AddSingleton<IMqttClient>(s => new MqttFactory().CreateMqttClient());
+            services.AddTransient<IMqttClientService, MqttClientService>();
             services.AddTransient<ITenantService, TenantService>();
             services.AddTransient<IPlaceService, PlaceService>();
             services.AddTransient<IMeterService, MeterService>();
+            services.AddTransient<IRawMeterReadingService, RawMeterReadingService>();
+            services.AddTransient<IMeterReadingService, MeterReadingService>();
+        }
+
+        public static void ConfigureCronJobs(this IServiceCollection services)
+        {
+            // services.AddScheduler(context =>
+            // {
+            //     var scheduleReadingJob = "ScheduleReadingJob";
+            //     context.AddJob(
+            //         sp =>
+            //         {
+
+            //         }
+            //     );
+            // });
         }
 
         public static void ConfigureDBContext(this IServiceCollection services, IConfiguration configuration)
@@ -58,6 +83,20 @@ namespace cubemeter_api.Extensions
             {
                 options.AddPolicy(allowedOrigin, policy => policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod());
             });
+        }
+        public static TObject DumpToConsole<TObject>(this TObject @object)
+        {
+            var output = "NULL";
+            if (@object != null)
+            {
+                output = JsonSerializer.Serialize(@object, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+            }
+
+            Console.WriteLine($"[{@object?.GetType().Name}]:\r\n{output}");
+            return @object;
         }
     }
 }

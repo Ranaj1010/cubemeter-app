@@ -20,6 +20,13 @@ namespace cubemeter_api.Services
             return entity;
         }
 
+        public async Task<List<Place>> AddRangeAsync(List<Place> entities)
+        {
+            await _dbContext.Places.AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+            return entities;
+        }
+
         public async Task<bool> DeleteAsync(long id)
         {
             try
