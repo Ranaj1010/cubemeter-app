@@ -22,6 +22,9 @@ const Page = () => {
 	const [current, send] = useMachine(TenantMachine);
 	const toaster = useToaster();
 	const placement = "topEnd";
+
+	const handleViewTenantDetails = (tenant: ITenant) => router.push(`/home/tenants/details?id=${tenant.id}`);
+
 	const handleSortColumn = (sortColumn: any, sortType: any) => {
 		setSortColumn(sortColumn);
 		setSortType(sortType);
@@ -112,9 +115,11 @@ const Page = () => {
 				]}
 			/>
 			<Stack direction="row" alignItems="stretch" justifyContent="space-between">
-				<Button appearance="primary" disabled={!current.matches("idle")} onClick={() => router.push("home/tenants/entry")}>
-					Create Tenant
-				</Button>
+				<Stack direction="row" spacing={5}>
+					<Button appearance="primary" disabled={!current.matches("idle")} onClick={() => router.push("home/tenants/entry")}>
+						Create Tenant
+					</Button>
+				</Stack>
 				<Stack direction="row" spacing={10}>
 					<IconButton icon={<ReloadIcon />} onClick={() => send("FETCH")} />
 					<TableSearchBarComponent
@@ -132,6 +137,7 @@ const Page = () => {
 					limit={limit}
 					onChangeLimit={setLimit}
 					page={page}
+					onHandleView={handleViewTenantDetails}
 					onChangePage={setPage}
 					onHandleSortColumn={handleSortColumn}
 					sortColumn={sortColumn}

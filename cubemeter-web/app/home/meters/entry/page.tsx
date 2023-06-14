@@ -11,7 +11,7 @@ import { useMachine } from "@xstate/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { Ref, useEffect, useRef, useState } from "react";
-import { BreadcrumbItemProps, Form, FormInstance, IconButton, Schema, Stack, useToaster } from "rsuite";
+import { BreadcrumbItemProps, Button, Form, FormInstance, IconButton, Schema, Stack, useToaster } from "rsuite";
 import { ctRatioTypeData, meterTypeData, meterUploadTypeData } from "./data";
 import { meterTypeRule, meterUploadTypeRule, nameRule, ratioRule, serialNumberRule, tenantIdRule } from "./form-rules";
 import MeterEntryMachine from "./machine";
@@ -73,6 +73,7 @@ const Page = () => {
 		serialNumber: serialNumberRule,
 	});
 	const formRef = useRef<any>();
+	const [isConnectionConfirmed, setIsConnectionConfirmed] = useState(false);
 	const [formError, setFormError] = useState({});
 	const [formValue, setFormValue] = useState<IFormProp>(initialValue);
 
@@ -161,6 +162,20 @@ const Page = () => {
 				send("CHANGE_MODE");
 				send({ type: "RETRIEVE_DATA", id: idParams });
 			}
+
+			let tenantIdParams = params?.get("tenantId");
+			if (tenantIdParams) {
+				setFormValue({
+					name: "",
+					tenantId: tenantIdParams,
+					meterType: IMeterTypeEnums.SinglePhase,
+					meterUploadType: IMeterUploadTypeEnums.IMeter,
+					serialNumber: "",
+					ratio: "",
+					remarks: "",
+					sortNumber: 0,
+				});
+			}
 		}
 	}, [params]);
 
@@ -179,7 +194,6 @@ const Page = () => {
 					formValue={formValue}
 					model={model}
 				>
-					<InputFormControl name="name" formlabel="Name" required placeholder="Enter Name" />
 					<SelectFormControl
 						name="tenantId"
 						formlabel="Tenant"
@@ -204,6 +218,17 @@ const Page = () => {
 					<InputFormControl name="serialNumber" formlabel="Serial No." placeholder="Enter Serial Number" required />
 					<InputNumberFormControl name="sortNumber" formlabel="Sort No." placeholder="Enter Sort No." />
 					<TextAreaFormControl name="remarks" formlabel="Remarks" placeholder="Enter Remarks" />
+					<Stack direction="column" spacing={30} alignItems="flex-start">
+						<h5>MQTT </h5>
+						<Stack.Item style={{ marginBottom: "20px" }}>
+							<Stack alignItems="flex-end" spacing={10}>
+								<InputFormControl name="name" formlabel="Topic Name" required placeholder="Enter Topic Name" />
+								<Button color="green" appearance="ghost">
+									Test Connection
+								</Button>
+							</Stack>
+						</Stack.Item>
+					</Stack>
 				</Form>
 			</Stack>
 			<Stack direction="row">
@@ -213,6 +238,7 @@ const Page = () => {
 						loading={current.matches("create.creating")}
 						placement="right"
 						appearance="primary"
+						disabled={!isConnectionConfirmed}
 						onClick={onHandleSubmit}
 					>
 						{current.matches("create.creating") ? "Submitting" : "Submit"}
@@ -224,6 +250,7 @@ const Page = () => {
 						icon={<PageNextIcon />}
 						loading={current.matches("update.updating")}
 						placement="right"
+						disabled={!isConnectionConfirmed}
 						appearance="primary"
 						onClick={onHandleSubmit}
 					>

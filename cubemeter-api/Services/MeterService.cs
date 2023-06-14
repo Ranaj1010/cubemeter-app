@@ -49,9 +49,42 @@ namespace cubemeter_api.Services
             }
         }
 
-        public async Task<Meter> GetAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.SingleOrDefaultAsync(expression);
+        public async Task<Meter> GetAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.Join(_dbContext.Tenants, meter => meter.TenantId, tenant => tenant.Id, (meter, tenant) => new Meter
+        {
+            Id = meter.Id,
+            Active = meter.Active,
+            ArchivedAt = meter.ArchivedAt,
+            CreatedAt = meter.CreatedAt,
+            MeterType = meter.MeterType,
+            MeterUploadType = meter.MeterUploadType,
+            Name = meter.Name,
+            Ratio = meter.Ratio,
+            Remarks = meter.Remarks,
+            SerialNumber = meter.SerialNumber,
+            SortNumber = meter.SortNumber,
+            Tenant = tenant,
+            TenantId = meter.TenantId
+        }).SingleOrDefaultAsync(expression);
 
         public async Task<List<Meter>> ListAsync(Expression<Func<Meter, bool>> expression) => await _dbContext.Meters.Where(expression).ToListAsync();
+
+        public async Task<List<Meter>> ListFromTenantAsync(long tenantId)
+        {
+            return await _dbContext.Meters.Where(meter => meter.Active && meter.TenantId == tenantId).Join(_dbContext.Tenants, meter => meter.TenantId, tenant => tenant.Id, (meter, tenant) => new Meter
+            {
+                Id = meter.Id,
+                Name = meter.Name,
+                MeterType = meter.MeterType,
+                MeterUploadType = meter.MeterUploadType,
+                Ratio = meter.Ratio,
+                SerialNumber = meter.SerialNumber,
+                SortNumber = meter.SortNumber,
+                TenantId = meter.TenantId,
+                Tenant = tenant,
+                Active = meter.Active,
+                Remarks = meter.Remarks
+            }).ToListAsync();
+        }
 
         public async Task<List<Meter>> ListWithTenantAsync()
         {

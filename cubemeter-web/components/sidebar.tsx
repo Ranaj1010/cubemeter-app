@@ -9,9 +9,10 @@ import DashboardIcon from "@rsuite/icons/legacy/Dashboard";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { MdOutlineElectricMeter, MdOutlineLocationOn } from "react-icons/md";
+import { MdOutlineElectricMeter, MdOutlineLocationOn, MdPrint } from "react-icons/md";
 import { Divider, Footer, Nav, Navbar, Sidebar, Sidenav, Stack } from "rsuite";
 import searchData from "../data/search.json";
+import expandedLogo from "../public/cubemeter-logo-official.png";
 import logo from "../public/cubemeter-temp-logo.png";
 const headerStyles = {
 	padding: 10,
@@ -64,6 +65,9 @@ const SideBarComponent = (props: ISidebarProps) => {
 						<Nav.Item eventKey="places" icon={<Icon as={MdOutlineLocationOn} />} onClick={() => router.push("/home/places")}>
 							Places
 						</Nav.Item>
+						<Nav.Item eventKey="reports" icon={<Icon as={MdPrint} />} onClick={() => router.push("/home/reports")}>
+							Reports
+						</Nav.Item>
 					</Nav>
 				</Sidenav.Body>
 			</Sidenav>
@@ -78,19 +82,9 @@ interface ISideNavHeader {
 const SideNavHeader = (props: ISideNavHeader) => {
 	const { expanded } = props;
 	return (
-		<Sidenav.Header style={{ marginBottom: 40 }}>
+		<Sidenav.Header style={{ marginBottom: expanded ? 0 : 100 }}>
 			<Stack direction="row" justifyContent="flex-start" alignItems="center" style={headerStyles}>
-				<Image src={logo} alt="logo" width={35} height={35} />
-				{expanded && (
-					<h3
-						style={{
-							color: "#3498FF",
-							marginLeft: 10,
-						}}
-					>
-						cubemeter
-					</h3>
-				)}
+				<Image src={expanded ? expandedLogo : logo} alt="logo" width={expanded ? 200 : 35} height={expanded ? 95 : 35} />
 			</Stack>
 		</Sidenav.Header>
 	);

@@ -2,7 +2,7 @@
 import ITenant from "@/models/tenant";
 import EditIcon from "@rsuite/icons/Edit";
 import DeleteIcon from "@rsuite/icons/Trash";
-import { IconButton, Pagination, Stack, Table } from "rsuite";
+import { Button, IconButton, Pagination, Stack, Table } from "rsuite";
 import { SortType } from "rsuite/esm/Table";
 const { Column, HeaderCell, Cell } = Table;
 interface ITenantTableProp {
@@ -11,6 +11,7 @@ interface ITenantTableProp {
 	page: number;
 	onChangeLimit: (limit: number) => void;
 	onChangePage: (page: number) => void;
+	onHandleView: (tenant: ITenant) => void;
 	onHandleEdit: (tenant: ITenant) => void;
 	onHandleDelete: (tenant: ITenant) => void;
 	sortColumn: any;
@@ -19,14 +20,25 @@ interface ITenantTableProp {
 }
 
 export const TenantTableComponent = (props: ITenantTableProp) => {
-	const { data, limit, page, onChangeLimit, onChangePage, sortColumn, onHandleDelete, onHandleEdit, sortType, onHandleSortColumn } = props;
+	const { data, limit, page, onChangeLimit, onChangePage, onHandleView, sortColumn, onHandleDelete, onHandleEdit, sortType, onHandleSortColumn } =
+		props;
 
 	return (
 		<div>
 			<Table autoHeight data={data} sortColumn={sortColumn} sortType={sortType} onSortColumn={onHandleSortColumn}>
 				<Column width={250} fixed sortable>
 					<HeaderCell>Name</HeaderCell>
-					<Cell dataKey="name" />
+					<Cell dataKey="name" style={{ padding: "5px" }}>
+						{(rowData) => (
+							<Stack direction="row">
+								<Stack.Item>
+									<Button appearance="link" onClick={() => onHandleView(rowData as ITenant)}>
+										{(rowData as ITenant).name}
+									</Button>
+								</Stack.Item>
+							</Stack>
+						)}
+					</Cell>
 				</Column>
 
 				<Column width={200}>
