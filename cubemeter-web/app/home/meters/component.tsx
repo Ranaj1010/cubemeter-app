@@ -2,7 +2,7 @@
 import IMeter from "@/models/meter";
 import EditIcon from "@rsuite/icons/Edit";
 import DeleteIcon from "@rsuite/icons/Trash";
-import { IconButton, Pagination, Stack, Table } from "rsuite";
+import { Button, IconButton, Pagination, Stack, Table } from "rsuite";
 import { SortType } from "rsuite/esm/Table";
 import { meterUploadTypeData } from "./entry/data";
 const { Column, HeaderCell, Cell } = Table;
@@ -14,20 +14,32 @@ interface IMeterTableProp {
 	onChangePage: (page: number) => void;
 	onHandleEdit: (meter: IMeter) => void;
 	onHandleDelete: (meter: IMeter) => void;
+	onHandleView: (meter: IMeter) => void;
 	sortColumn: any;
 	sortType: any;
 	onHandleSortColumn: (dataKey: string, sortType?: SortType | undefined) => void;
 }
 
 export const MeterTableComponent = (props: IMeterTableProp) => {
-	const { data, limit, page, onChangeLimit, onChangePage, sortColumn, onHandleDelete, onHandleEdit, sortType, onHandleSortColumn } = props;
+	const { data, limit, page, onChangeLimit, onChangePage, onHandleView, sortColumn, onHandleDelete, onHandleEdit, sortType, onHandleSortColumn } =
+		props;
 
 	return (
 		<div>
 			<Table autoHeight data={data} sortColumn={sortColumn} sortType={sortType} onSortColumn={onHandleSortColumn}>
 				<Column width={250} fixed sortable>
-					<HeaderCell>Name</HeaderCell>
-					<Cell dataKey="name" />
+					<HeaderCell>Serial Number</HeaderCell>
+					<Cell dataKey="serialNumber" style={{ padding: "5px" }}>
+						{(rowData) => (
+							<Stack direction="row">
+								<Stack.Item>
+									<Button appearance="link" onClick={() => onHandleView(rowData as IMeter)}>
+										{(rowData as IMeter).serialNumber}
+									</Button>
+								</Stack.Item>
+							</Stack>
+						)}
+					</Cell>
 				</Column>
 
 				<Column width={100} flexGrow={1}>
@@ -36,10 +48,7 @@ export const MeterTableComponent = (props: IMeterTableProp) => {
 						{(rowData) => <label>{meterUploadTypeData.find((data) => data.value === (rowData as IMeter).meterUploadType)?.label}</label>}
 					</Cell>
 				</Column>
-				<Column width={200}>
-					<HeaderCell>Serial No.</HeaderCell>
-					<Cell dataKey="serialNumber" />
-				</Column>
+
 				<Column width={200} flexGrow={1} sortable>
 					<HeaderCell>Remarks</HeaderCell>
 					<Cell dataKey="remarks" />

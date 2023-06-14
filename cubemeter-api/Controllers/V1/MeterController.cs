@@ -65,6 +65,25 @@ namespace cubemeter_api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("tenant/{tenantId:long}")]
+        public async Task<ActionResult<GetMetersResponse>> GetByTenantId(long tenantId)
+        {
+            #region Data Validation
+            var data = await _meterService.ListFromTenantAsync(tenantId);
+            if (data == null) return BadRequest(new GetMeterResponse
+            {
+                Message = $"Invalid Request. Unknown {_name}"
+            });
+            #endregion
+
+            var response = new GetMetersResponse
+            {
+                Message = $"{_name} found.",
+                Data = _mapper.Map<List<MeterDto>>(data)
+            };
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<ActionResult<AddMeterResponse>> AddMeter(AddMeterRequest request)
         {
@@ -141,20 +160,6 @@ namespace cubemeter_api.Controllers
 
             return Ok(response);
         }
-        
-        [HttpPost("generate-readings")]
-        public async Task<ActionResult<GeneratedMeterReadingReportResponse>> GenerateReadingFromMeters(GeneratedMeterReadingReportRequest payload)
-        {
-            var meters = await _meterService.ListAsync(e => e.Active);
-            var readings = await _meterReadingService.GenerateReadingsAsync(meters);
-            var reports = await _meterReadingService.GenerateMeterReadingReportAsync(readings);
-            var response = new GeneratedMeterReadingReportResponse 
-            {
-                Message = "Reading generated.",
-                Data = reports
-            };
-
-            return Ok(response);
-        }
+      
     }
 }

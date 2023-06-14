@@ -27,6 +27,8 @@ const Page = () => {
 		setSortType(sortType);
 	};
 
+	const handleViewMeterDetails = (meter: IMeter) => router.push(`/home/meters/details?id=${meter.id}`);
+
 	const filteredData = () => {
 		const filtered: IMeter[] = current.context.data.filter((item) => {
 			if (!item.name.includes(searchKeyword) && !item.serialNumber.includes(searchKeyword)) {
@@ -128,6 +130,7 @@ const Page = () => {
 			{current.matches("fetchingData.fetching") && <Placeholder.Grid rows={5} columns={6} active />}
 			{!current.matches("fetchingData.fetching") && (
 				<MeterTableComponent
+					onHandleView={handleViewMeterDetails}
 					data={filteredData()}
 					limit={limit}
 					onChangeLimit={setLimit}
