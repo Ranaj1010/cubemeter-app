@@ -5,17 +5,18 @@ import { InputFormControl, InputNumberFormControl, SelectFormControl, TextAreaFo
 import { ErrorNotification, FailedNotification, SuccessNotification } from "@/components/notifications";
 import IMeter from "@/models/meter";
 import IPlace from "@/models/place";
+import ITenant from "@/models/tenant";
 import { IMeterTypeEnums, IMeterUploadTypeEnums } from "@/utilities/enums";
 import PageNextIcon from "@rsuite/icons/PageNext";
 import { useMachine } from "@xstate/react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import * as mqtt from "mqtt";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { Ref, useEffect, useRef, useState } from "react";
-import { BreadcrumbItemProps, Button, Form, FormInstance, IconButton, Schema, Stack, useToaster } from "rsuite";
+import { BreadcrumbItemProps, Button, Form, FormInstance, IconButton, Input, Schema, Stack, useToaster } from "rsuite";
 import { ctRatioTypeData, meterTypeData, meterUploadTypeData } from "./data";
 import { meterTypeRule, meterUploadTypeRule, nameRule, ratioRule, serialNumberRule, tenantIdRule } from "./form-rules";
 import MeterEntryMachine from "./machine";
-
 interface IFormProp {
 	name: string;
 	tenantId: string;
@@ -30,6 +31,7 @@ interface IFormProp {
 const Page = () => {
 	const params = useSearchParams();
 	const router = useRouter();
+	const [topic, setTopic] = useState("");
 	//#region  machine
 	const [current, send] = useMachine(MeterEntryMachine);
 	//#endregion
@@ -55,7 +57,7 @@ const Page = () => {
 	];
 
 	const initialValue: IFormProp = {
-		name: "",
+		name: "initialValue",
 		tenantId: "",
 		meterType: IMeterTypeEnums.SinglePhase,
 		meterUploadType: IMeterUploadTypeEnums.IMeter,
@@ -74,12 +76,14 @@ const Page = () => {
 	});
 	const formRef = useRef<any>();
 	const [isConnectionConfirmed, setIsConnectionConfirmed] = useState(false);
+	const [isConfirmingConnection, setIsConfirmingConnection] = useState(false);
 	const [formError, setFormError] = useState({});
 	const [formValue, setFormValue] = useState<IFormProp>(initialValue);
 
 	const onHandleSubmit = () => {
 		//#region Location Validation
 		if (!formRef.current!.check()) {
+			console.log(formValue);
 			toaster.push(<ErrorNotification title="Incomplete Fields" message="Please complete all fields before submitting." />, {
 				duration: 3000,
 				placement: placement,
@@ -89,7 +93,7 @@ const Page = () => {
 
 		const tenant: IMeter = {
 			id: current.context.payload?.id,
-			name: formValue.name,
+			name: formValue.serialNumber,
 			meterType: formValue.meterType,
 			meterUploadType: formValue.meterUploadType,
 			tenantId: Number.parseInt(formValue.tenantId),
@@ -138,7 +142,7 @@ const Page = () => {
 
 		if (current.matches("update.encoding") && current.context.payload) {
 			setFormValue({
-				name: current.context.payload?.name ?? "",
+				name: current.context.payload?.serialNumber ?? "",
 				tenantId: current.context.payload?.tenantId.toString() ?? "",
 				meterType: current.context.payload?.meterType ?? IMeterTypeEnums.SinglePhase,
 				meterUploadType: current.context.payload?.meterUploadType ?? IMeterUploadTypeEnums.IMeter,
@@ -147,6 +151,8 @@ const Page = () => {
 				remarks: current.context.payload?.remarks ?? "",
 				sortNumber: current.context.payload?.sortNumber ?? 0,
 			});
+			var tenant = current.context.tenants.find((r: ITenant) => r.id == current.context.payload?.tenantId.toString());
+			setTopic(`${tenant?.gateway}/${tenant?.unitId}`);
 		}
 
 		if (current.matches("update.error")) {
@@ -166,7 +172,7 @@ const Page = () => {
 			let tenantIdParams = params?.get("tenantId");
 			if (tenantIdParams) {
 				setFormValue({
-					name: "",
+					name: "initialValue",
 					tenantId: tenantIdParams,
 					meterType: IMeterTypeEnums.SinglePhase,
 					meterUploadType: IMeterUploadTypeEnums.IMeter,
@@ -178,6 +184,44 @@ const Page = () => {
 			}
 		}
 	}, [params]);
+
+	useEffect(() => {
+		console.log(formValue);
+		if (current.context.tenants.length > 0 && formValue.tenantId != "") {
+			var tenant = current.context.tenants.find((r: ITenant) => r.id == Number.parseInt(formValue.tenantId));
+			console.log(tenant);
+			setTopic(`${tenant?.gateway}/${tenant?.unitId}`);
+		}
+	}, [current.context.tenants, formValue]);
+
+	const testConnection = () => {
+		setIsConfirmingConnection(true);
+		var client = mqtt.connect("ws://5.189.132.25:8055", {
+			protocol: "tcp",
+		});
+
+		client.on("connect", () => {
+			client.subscribe(topic, function (err) {
+				setIsConfirmingConnection(false);
+				if (!err) {
+					setIsConnectionConfirmed(true);
+					toaster.push(
+						<SuccessNotification title="Success" message="Test Connection is Successfull" onCloseNotification={onHandleReset} />,
+						{
+							duration: 3000,
+							placement: placement,
+						}
+					);
+				}
+				if (err) {
+					toaster.push(<FailedNotification title="Failed" message="Test Connection Failed. Please try again." onRetry={onHandleRetry} />, {
+						duration: 3000,
+						placement: placement,
+					});
+				}
+			});
+		});
+	};
 
 	return (
 		<Stack direction="column" spacing={20} alignItems="stretch">
@@ -202,6 +246,11 @@ const Page = () => {
 							label: item.name,
 							value: item.id?.toString(),
 						}))}
+						onChange={(value, event) => {
+							console.log(value);
+							var tenant = current.context.tenants.find((r) => r.id == value);
+							setTopic(`${tenant?.gateway}/${tenant?.unitId}`);
+						}}
 						searchable
 						required
 					/>
@@ -219,13 +268,22 @@ const Page = () => {
 					<InputNumberFormControl name="sortNumber" formlabel="Sort No." placeholder="Enter Sort No." />
 					<TextAreaFormControl name="remarks" formlabel="Remarks" placeholder="Enter Remarks" />
 					<Stack direction="column" spacing={30} alignItems="flex-start">
-						<h5>MQTT </h5>
+						<h5>Realtime Meter Reading</h5>
 						<Stack.Item style={{ marginBottom: "20px" }}>
-							<Stack alignItems="flex-end" spacing={10}>
-								<InputFormControl name="name" formlabel="Topic Name" required placeholder="Enter Topic Name" />
-								<Button color="green" appearance="ghost">
-									Test Connection
-								</Button>
+							<Stack direction="column" spacing={5} alignItems="flex-start">
+								<label>Connection</label>
+								<Stack alignItems="flex-end" spacing={10}>
+									<Input value={topic} readOnly style={{ width: "300px" }} required placeholder="No selected tenant yet." />
+									<Button
+										color="green"
+										loading={isConfirmingConnection}
+										onClick={testConnection}
+										disabled={!topic}
+										appearance="ghost"
+									>
+										Test Connection
+									</Button>
+								</Stack>
 							</Stack>
 						</Stack.Item>
 					</Stack>

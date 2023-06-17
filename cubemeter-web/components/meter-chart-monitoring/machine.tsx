@@ -43,7 +43,7 @@ const MeterChartMonitoringMachine = Machine<IContext, IStates, ITypes>({
 						src: async (context) => {
 							try {
 								console.log(context.meter);
-								context.mqttClient.subscribe(`${context.meter!.tenant?.gateway}/${context.meter!.id}`);
+								context.mqttClient.subscribe(`${context.meter!.tenant?.gateway}/${context.meter!.tenant?.unitId}`);
 							} catch (error) {
 								console.log(error);
 							}

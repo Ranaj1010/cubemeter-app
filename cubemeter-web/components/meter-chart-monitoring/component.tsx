@@ -169,6 +169,7 @@ const MeterChartMonitoring = (props: IMeterChartMonitoringProps) => {
 		if (current.matches("connected")) {
 			client.on("message", (topic, value) => {
 				console.log(value.toString());
+				console.log(topic.toString());
 				let parsedReading = JSON.parse(value.toString());
 				let rawReading: IRawMeterReading = {
 					timeStamp: new Date(),
@@ -177,7 +178,7 @@ const MeterChartMonitoring = (props: IMeterChartMonitoringProps) => {
 					kilowatthour: Number.parseFloat(parsedReading.kilowatthour),
 					current: Number.parseFloat(parsedReading.current),
 				};
-				if (topic == `${current.context.meter!.tenant?.gateway}/${current.context.meter!.id}`) {
+				if (topic == `${current.context.meter!.tenant?.gateway}/${current.context.meter!.tenant?.unitId}`) {
 					send({ type: "UPDATE", payload: rawReading });
 				}
 			});

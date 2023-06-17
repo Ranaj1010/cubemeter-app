@@ -1,6 +1,6 @@
 import { IEntryModeEnum } from "@/components/form-controls";
 import IMeter from "@/models/meter";
-import IPlace from "@/models/place";
+import ITenant from "@/models/tenant";
 import { GET, POST, PUT } from "@/utilities/http-services";
 import { AxiosError } from "axios";
 import { Machine, assign } from "xstate";
@@ -14,7 +14,7 @@ interface IContextProps {
 	abortController: AbortController;
 	endpoint: string;
 	mode: IEntryModeEnum;
-	tenants: IPlace[];
+	tenants: ITenant[];
 }
 
 interface IStates {
