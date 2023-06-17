@@ -9,10 +9,6 @@ export const meterTypeData: ItemDataType[] = [
 		value: IMeterTypeEnums.SinglePhase,
 	},
 	{
-		label: "Three Single Phase",
-		value: IMeterTypeEnums.ThreePhase,
-	},
-	{
 		label: "PRA1",
 		value: IMeterTypeEnums.PRA1,
 	},
@@ -27,10 +23,6 @@ export const meterTypeData: ItemDataType[] = [
 ];
 
 export const meterUploadTypeData: ItemDataType[] = [
-	{
-		label: "IMeter",
-		value: IMeterUploadTypeEnums.IMeter,
-	},
 	{
 		label: "ModBus",
 		value: IMeterUploadTypeEnums.ModBus,

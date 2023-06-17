@@ -20,7 +20,7 @@ namespace cubemeter_api.Services
         private List<RawMeterReading> _rawReadings;
         private List<string> _topics;
         private bool _hasNewAddedTopic = false;
-        private readonly string _host = "5.189.132.25";
+        private readonly string _host = "172.104.102.236";
         private PeriodicTimer _timer;
 
         public MqttClientService(ILogger<MqttClientService> logger, MqttFactory mqttFactory, IMqttClient mqttClient, IMeterService meterService, IRawMeterReadingService rawMeterReadingService)
@@ -45,7 +45,7 @@ namespace cubemeter_api.Services
 
             var meters = await _meterService.ListWithTenantAsync();
 
-            _topics = meters.Select(meter => $"{meter.Tenant.Gateway}/{meter.Id}").ToList();
+            _topics = meters.Select(meter => $"{meter.Tenant.Gateway}/{meter.Tenant.UnitId}").ToList();
 
             foreach (var topic in _topics)
             {
@@ -275,16 +275,25 @@ namespace cubemeter_api.Services
 
         public async Task SaveToDb()
         {
-            _logger.LogInformation($"Reading Count: {_rawReadings.Count()}");
-
-            var savedData = await _rawMeterReadingService.AddRangeAsync(_rawReadings);
-
-            if (savedData.Count > 0)
+            if (_rawReadings.Count() == 0)
             {
-                _logger.LogInformation($"Saved data Count: {savedData.Count()}");
+                _logger.LogInformation($"No readings found.");
+            }
+            if (_rawReadings.Count() > 0)
+            {
+                _logger.LogInformation($"Reading Count: {_rawReadings.Count()}");
+
+                var savedData = await _rawMeterReadingService.AddRangeAsync(_rawReadings);
+
+                if (savedData.Count > 0)
+                {
+                    _logger.LogInformation($"Saved data Count: {savedData.Count()}");
+                }
+
+                _rawReadings.Clear();
             }
 
-            _rawReadings.Clear();
+
         }
     }
 }

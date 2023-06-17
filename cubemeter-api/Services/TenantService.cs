@@ -64,6 +64,7 @@ namespace cubemeter_api.Services
             Active = tenant.Active,
             Remarks = tenant.Remarks,
             SerialNumber = tenant.SerialNumber,
+            BuildingNumber = tenant.BuildingNumber,
             Place = place,
         }).SingleOrDefaultAsync(expression);
 
@@ -78,6 +79,7 @@ namespace cubemeter_api.Services
             Gateway = tenant.Gateway,
             Active = tenant.Active,
             Remarks = tenant.Remarks,
+            BuildingNumber = tenant.BuildingNumber,
             SerialNumber = tenant.SerialNumber,
             Place = place,
         }).ToListAsync();
@@ -96,6 +98,7 @@ namespace cubemeter_api.Services
                 existingData.SerialNumber = entity.SerialNumber;
                 existingData.UnitId = entity.UnitId;
                 existingData.Gateway = entity.Gateway;
+                existingData.BuildingNumber = entity.BuildingNumber;
 
                 _dbContext.Tenants.Update(existingData);
 

@@ -11,7 +11,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { Ref, useEffect, useRef, useState } from "react";
 import { BreadcrumbItemProps, Form, FormInstance, IconButton, Schema, Stack, useToaster } from "rsuite";
-import { gatewayRule, nameRule, placeIdRule, serialNumberRule, unitIdRule } from "./form-rules";
+import { buildingNumberRule, gatewayRule, nameRule, placeIdRule, serialNumberRule, unitIdRule } from "./form-rules";
 import TenantEntry from "./machine";
 
 interface IFormProp {
@@ -19,6 +19,7 @@ interface IFormProp {
 	placeId: string;
 	unitId: string;
 	serialNumber: string;
+	buildingNumber: string;
 	gateway: string;
 	remarks: string;
 }
@@ -55,6 +56,7 @@ const Page = () => {
 		placeId: "",
 		unitId: "",
 		serialNumber: "",
+		buildingNumber: "",
 		gateway: "",
 		remarks: "",
 	};
@@ -63,6 +65,7 @@ const Page = () => {
 		placeId: placeIdRule,
 		unitId: unitIdRule,
 		serialNumber: serialNumberRule,
+		buildingNumber: buildingNumberRule,
 		gateway: gatewayRule,
 	});
 	const formRef = useRef<any>();
@@ -82,6 +85,7 @@ const Page = () => {
 		const tenant: ITenant = {
 			id: current.context.payload?.id,
 			name: formValue.name,
+			buildingNumber: formValue.buildingNumber,
 			gateway: formValue.gateway,
 			placeId: Number.parseInt(formValue.placeId),
 			dateRegistered: current.context.payload?.dateRegistered!,
@@ -140,6 +144,7 @@ const Page = () => {
 				serialNumber: current.context.payload?.serialNumber ?? "",
 				gateway: current.context.payload?.gateway ?? "",
 				remarks: current.context.payload?.remarks ?? "",
+				buildingNumber: current.context.payload?.buildingNumber ?? "",
 			});
 		}
 
@@ -186,9 +191,11 @@ const Page = () => {
 						searchable
 						required
 					/>
+					<InputFormControl name="buildingNumber" formlabel="Building No." placeholder="Enter Building Number" required />
 					<InputNumberFormControl name="unitId" formlabel="Unit Id" placeholder="Entert Unit Id" required />
 					<InputFormControl name="gateway" formlabel="Gateway" placeholder="Enter Gateway Number" required />
 					<InputFormControl name="serialNumber" formlabel="Serial No." placeholder="Enter Serial Number" required />
+
 					<TextAreaFormControl name="remarks" formlabel="Remarks" placeholder="Enter Remarks" />
 				</Form>
 			</Stack>
