@@ -93,7 +93,7 @@ const Page = () => {
 
 		const tenant: IMeter = {
 			id: current.context.payload?.id,
-			name: formValue.serialNumber,
+			name: topic,
 			meterType: formValue.meterType,
 			meterUploadType: formValue.meterUploadType,
 			tenantId: Number.parseInt(formValue.tenantId),
@@ -142,7 +142,7 @@ const Page = () => {
 
 		if (current.matches("update.encoding") && current.context.payload) {
 			setFormValue({
-				name: current.context.payload?.serialNumber ?? "",
+				name: current.context.payload?.name ?? "",
 				tenantId: current.context.payload?.tenantId.toString() ?? "",
 				meterType: current.context.payload?.meterType ?? IMeterTypeEnums.SinglePhase,
 				meterUploadType: current.context.payload?.meterUploadType ?? IMeterUploadTypeEnums.IMeter,

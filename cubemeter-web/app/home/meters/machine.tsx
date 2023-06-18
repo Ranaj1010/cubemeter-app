@@ -1,11 +1,11 @@
-import IMeter from "@/models/meter";
+import { ICustomMeter } from "@/models/meter";
 import { DELETE, GET } from "@/utilities/http-services";
 import { AxiosError } from "axios";
 import { Machine, assign } from "xstate";
 
 interface IContextProps {
-	data: IMeter[];
-	selectedData?: IMeter;
+	data: ICustomMeter[];
+	selectedData?: ICustomMeter;
 	endpoint: string;
 	abortController: AbortController;
 	errorMessage: string;
@@ -31,10 +31,10 @@ interface IStates {
 	};
 }
 
-type ITypes = { type: "FETCH" } | { type: "RETRY" } | { type: "CANCEL" } | { type: "DELETE"; place: IMeter } | { type: "DELETE_START" };
+type ITypes = { type: "FETCH" } | { type: "RETRY" } | { type: "CANCEL" } | { type: "DELETE"; meter: ICustomMeter } | { type: "DELETE_START" };
 
 const MeterMachine = Machine<IContextProps, IStates, ITypes>({
-	id: "tenantMachine",
+	id: "meterMachine",
 	initial: "fetchingData",
 	context: {
 		data: [],
@@ -49,7 +49,7 @@ const MeterMachine = Machine<IContextProps, IStates, ITypes>({
 				DELETE: {
 					target: "delete",
 					actions: assign({
-						selectedData: (_, event) => event.place,
+						selectedData: (_, event) => event.meter,
 					}),
 				},
 			},
@@ -59,15 +59,15 @@ const MeterMachine = Machine<IContextProps, IStates, ITypes>({
 			states: {
 				fetching: {
 					invoke: {
-						src: (context) => GET({ endpoint: context.endpoint, abortSignal: context.abortController.signal }),
+						src: (context) => GET({ endpoint: context.endpoint + "/with-kilowatthour", abortSignal: context.abortController.signal }),
 						onDone: {
-							target: "#tenantMachine.idle",
+							target: "#meterMachine.idle",
 							actions: assign({
 								data: (_, event) => event.data.data.data,
 							}),
 						},
 						onError: {
-							target: "#tenantMachine.fetchingData.failed",
+							target: "#meterMachine.fetchingData.failed",
 							actions: assign({
 								errorMessage: (_, event) => {
 									const error: AxiosError = event.data;
@@ -97,7 +97,7 @@ const MeterMachine = Machine<IContextProps, IStates, ITypes>({
 					on: {
 						DELETE_START: "deleting",
 						CANCEL: {
-							target: "#tenantMachine.idle",
+							target: "#meterMachine.idle",
 							actions: assign({
 								selectedData: (_, event) => undefined,
 							}),
@@ -128,14 +128,14 @@ const MeterMachine = Machine<IContextProps, IStates, ITypes>({
 				},
 				success: {
 					on: {
-						FETCH: "#tenantMachine.fetchingData",
+						FETCH: "#meterMachine.fetchingData",
 					},
 				},
 				failed: {
 					on: {
 						RETRY: "deleting",
 						CANCEL: {
-							target: "#tenantMachine.idle",
+							target: "#meterMachine.idle",
 							actions: assign({
 								selectedData: (_, event) => undefined,
 							}),

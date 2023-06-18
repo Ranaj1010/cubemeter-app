@@ -56,6 +56,7 @@ namespace cubemeter_api.Extensions
             services.AddTransient<IMeterService, MeterService>();
             services.AddTransient<IRawMeterReadingService, RawMeterReadingService>();
             services.AddTransient<IMeterReadingService, MeterReadingService>();
+            services.AddTransient<IMeterReadingBatchService, MeterReadingBatchService>();
         }
 
         public static void ConfigureCronJobs(this IServiceCollection services)

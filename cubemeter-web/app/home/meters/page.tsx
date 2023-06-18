@@ -3,7 +3,7 @@ import { BreadCrumbComponent } from "@/components/breadcrumbs";
 import { ModalComponent } from "@/components/modal";
 import { FailedNotification, SuccessNotification } from "@/components/notifications";
 import { TableSearchBarComponent } from "@/components/searchbar";
-import IMeter from "@/models/meter";
+import IMeter, { ICustomMeter } from "@/models/meter";
 import ReloadIcon from "@rsuite/icons/Reload";
 import { useMachine } from "@xstate/react";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ const Page = () => {
 	const handleViewMeterDetails = (meter: IMeter) => router.push(`/home/meters/details?id=${meter.id}`);
 
 	const filteredData = () => {
-		const filtered: IMeter[] = current.context.data.filter((item) => {
+		const filtered: ICustomMeter[] = current.context.data.filter((item) => {
 			if (!item.name.includes(searchKeyword) && !item.serialNumber.includes(searchKeyword)) {
 				return false;
 			}
@@ -139,8 +139,8 @@ const Page = () => {
 					onHandleSortColumn={handleSortColumn}
 					sortColumn={sortColumn}
 					sortType={sortType}
-					onHandleEdit={(place: IMeter) => router.push(`/home/meters/entry?id=${place.id}`)}
-					onHandleDelete={(place: IMeter) => send({ type: "DELETE", place: place })}
+					onHandleEdit={(meter: ICustomMeter) => router.push(`/home/meters/entry?id=${meter.id}`)}
+					onHandleDelete={(meter: ICustomMeter) => send({ type: "DELETE", meter: meter })}
 				/>
 			)}
 			<ModalComponent

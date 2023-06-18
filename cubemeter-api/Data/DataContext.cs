@@ -15,6 +15,7 @@ namespace cubemeter_api.Data
         public DbSet<Meter> Meters { get; set; }
         public DbSet<RawMeterReading> RawMeterReadings { get; set; }
         public DbSet<MeterReading> MeterReadings { get; set; }
+        public DbSet<MeterReadingBatch> MeterReadingBatches { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=cubemeter_db;Username=postgres;Password=Baba101095", x =>
             {

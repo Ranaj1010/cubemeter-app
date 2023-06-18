@@ -2,12 +2,10 @@
 
 import { BreadCrumbComponent } from "@/components/breadcrumbs";
 import MeterChartMonitoring from "@/components/meter-chart-monitoring/component";
-import EditIcon from "@rsuite/icons/Edit";
-import DeleteIcon from "@rsuite/icons/Trash";
 import { useMachine } from "@xstate/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Button, Panel, PanelGroup, Placeholder, Stack } from "rsuite";
+import { Panel, PanelGroup, Placeholder, Stack } from "rsuite";
 import { meterTypeData, meterUploadTypeData } from "../entry/data";
 import { MeterPropertyItem } from "./components";
 import MeterDetails from "./machine";
@@ -44,25 +42,6 @@ const Page = () => {
 	useEffect(() => {
 		console.log(pathname);
 	}, [pathname]);
-
-	// useEffect(() => {
-	// 	if (current.context.payload != null) {
-	// 		const client: MqttClient = mqtt.connect("ws://5.189.132.25:8055", {
-	// 			protocol: "tcp",
-	// 		});
-	// 		client.on("connect", (stream) => {
-	// 			console.log("connected..");
-	// 			console.log(`${current.context.payload?.tenant?.gateway}/${current.context.id}`);
-	// 			client.subscribe(`${current.context.payload?.tenant?.gateway}/${current.context.id}`, (err) => {
-	// 				console.log(err);
-	// 			});
-	// 		});
-	// 		client.on("message", (topic, value) => {
-	// 			console.log("TOPIC: " + topic);
-	// 			console.log("VALUE: " + value);
-	// 		});
-	// 	}
-	// }, [current.context.payload]);
 
 	return current.matches("retrieveDataById") ? (
 		<Stack direction="column" spacing={20} alignItems="stretch">
@@ -105,19 +84,12 @@ const Page = () => {
 						},
 					]}
 				/>
-				<Stack spacing={10}>
-					<Button startIcon={<EditIcon />} appearance="ghost">
-						Edit
-					</Button>
-					<Button startIcon={<DeleteIcon />} appearance="ghost" color="red">
-						Delete
-					</Button>
-				</Stack>
 			</Stack>
 			<PanelGroup accordion bordered>
 				<Panel header="Details" defaultExpanded>
 					<Stack direction="row" alignItems="flex-start" spacing={200} justifyContent="flex-start">
 						<Stack direction="column" alignItems="stretch" spacing={10} style={{ paddingTop: 15 }}>
+							<MeterPropertyItem label="Tenant" value={current.context.payload?.tenant?.name.toString() ?? ""} />
 							<MeterPropertyItem
 								label="Model"
 								value={meterUploadTypeData.find((data) => data.value === current.context.payload?.meterUploadType)?.label as string}
@@ -126,9 +98,9 @@ const Page = () => {
 								label="Type"
 								value={meterTypeData.find((data) => data.value === current.context.payload?.meterType)?.label as string}
 							/>
-							<MeterPropertyItem label="Ratio" value={current.context.payload?.ratio.toString() ?? ""} />
 						</Stack>
 						<Stack direction="column" alignItems="stretch" spacing={10} style={{ paddingTop: 15 }}>
+							<MeterPropertyItem label="Ratio" value={current.context.payload?.ratio.toString() ?? ""} />
 							<MeterPropertyItem label="Sort Number" value={current.context.payload?.sortNumber.toString() ?? ""} />
 							<MeterPropertyItem label="Remarks" value={current.context.payload?.remarks.toString() ?? ""} />
 						</Stack>

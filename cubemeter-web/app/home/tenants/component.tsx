@@ -50,6 +50,10 @@ export const TenantTableComponent = (props: ITenantTableProp) => {
 					<Cell dataKey="gateway" />
 				</Column>
 				<Column width={200}>
+					<HeaderCell>Building No.</HeaderCell>
+					<Cell dataKey="buildingNumber" />
+				</Column>
+				<Column width={200}>
 					<HeaderCell>Serial No.</HeaderCell>
 					<Cell dataKey="serialNumber" />
 				</Column>
