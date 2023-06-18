@@ -13,5 +13,17 @@ interface IMeter extends IBaseModel {
 	sortNumber: number;
 	serialNumber: string;
 }
+export interface ICustomMeter extends IBaseModel {
+	name: string;
+	tenantId: number;
+	tenant?: ITenant;
+	kilowatthour: number;
+	meterType: IMeterTypeEnums;
+	meterUploadType: IMeterUploadTypeEnums;
+	ratio: string;
+	remarks: string;
+	sortNumber: number;
+	serialNumber: string;
+}
 
 export default IMeter;

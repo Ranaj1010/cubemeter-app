@@ -11,12 +11,14 @@ namespace cubemeter_api.Services
     {
         private readonly IMeterService _meterService;
         private readonly IRawMeterReadingService _rawMeterReadingService;
+        private readonly IMeterReadingBatchService _meterReadingBatchService;
         private readonly DataContext _dbContext;
-        public MeterReadingService(DataContext dbContext, IMeterService meterService, IRawMeterReadingService rawMeterReadingService)
+        public MeterReadingService(DataContext dbContext, IMeterService meterService, IRawMeterReadingService rawMeterReadingService, IMeterReadingBatchService meterReadingBatchService)
         {
             _dbContext = dbContext;
             _meterService = meterService;
             _rawMeterReadingService = rawMeterReadingService;
+            _meterReadingBatchService = meterReadingBatchService;
         }
 
         public async Task<MeterReading> AddAsync(MeterReading entity)
@@ -88,18 +90,31 @@ namespace cubemeter_api.Services
         {
             try
             {
-                var reading = new MeterReading();
-                var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter(meter.Name);
-                var previousReading = await GetPreviousReadingAsync(meter);
+                var newReading = new MeterReading();
+                var batch = await _meterReadingBatchService.AddAsync(new MeterReadingBatch());
 
-                reading.MeterId = meter.Id;
-                reading.TenantId = meter.TenantId;
-                reading.PreviousConsumption = previousReading != null ? previousReading.CurrentConsumption : 0;
-                reading.PreviousReading = previousReading != null ? previousReading.CurrentReading : 0;
-                reading.CurrentReading = recentMeterReading.Kilowatthour;
-                reading.Multi = 1;
+                if (batch != null)
+                {
+                    var reading = new MeterReading();
+                    var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter(meter.Name);
+                    var previousReading = await GetPreviousReadingAsync(meter);
+                    var currentReading = recentMeterReading != null ? recentMeterReading.Kilowatthour : 0;
+                    var currentConsumption = previousReading != null ? currentReading - previousReading.CurrentReading : 0;
+                    var previousConsumption = previousReading != null ? previousReading.CurrentConsumption : 0;
 
-                var newReading = await AddAsync(reading);
+                    reading.MeterReadingBatchId = batch.Id;
+                    reading.MeterId = meter.Id;
+                    reading.TenantId = meter.TenantId;
+                    reading.CurrentConsumption = currentConsumption;
+                    reading.PreviousConsumption = previousConsumption;
+                    reading.PreviousReading = previousReading != null ? previousReading.CurrentReading : 0;
+                    reading.CurrentReading = currentReading;
+                    reading.PercentageDifference = previousConsumption > 0 ? (currentConsumption - previousConsumption) / previousConsumption : 0;
+                    reading.Multi = 1;
+
+                    reading = await AddAsync(reading);
+                }
+
                 return newReading;
             }
             catch (System.Exception)
@@ -125,9 +140,9 @@ namespace cubemeter_api.Services
 
         public async Task<MeterReading?> GetPreviousReadingAsync(Meter meter)
         {
-            var list = await _dbContext.MeterReadings.Where(reading => reading.MeterId.Equals(meter.Id)).OrderByDescending(reading => reading.Id).ToListAsync();
+            var list = await _dbContext.MeterReadings.Where(reading => reading.MeterId.Equals(meter.Id)).OrderBy(reading => reading.Id).ToListAsync();
 
-            return list.Count > 0 ? list.First() : null;
+            return list.Count > 0 ? list.Last() : null;
         }
 
         public async Task<List<MeterReading>> ListAsync(Expression<Func<MeterReading, bool>> expression) => await _dbContext.MeterReadings.Where(expression).ToListAsync();

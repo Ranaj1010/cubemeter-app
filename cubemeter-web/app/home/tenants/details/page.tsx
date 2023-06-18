@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 import IMeter from "@/models/meter";
 import EditIcon from "@rsuite/icons/Edit";
-import DeleteIcon from "@rsuite/icons/Trash";
 import { Button, Header, Panel, PanelGroup, Placeholder, Stack } from "rsuite";
 import { TenantMeterGridView, TenantPropertyItem } from "./components";
 import TenantDetails from "./machine";
@@ -67,11 +66,12 @@ const Page = () => {
 					]}
 				/>
 				<Stack spacing={10}>
-					<Button startIcon={<EditIcon />} appearance="ghost">
+					<Button
+						startIcon={<EditIcon />}
+						appearance="ghost"
+						onClick={() => router.push(`/home/tenants/entry?id=${current.context.payload?.id}`)}
+					>
 						Edit
-					</Button>
-					<Button startIcon={<DeleteIcon />} appearance="ghost" color="red">
-						Delete
 					</Button>
 				</Stack>
 			</Stack>
@@ -86,7 +86,10 @@ const Page = () => {
 						<Stack direction="column" alignItems="stretch" spacing={10} style={{ paddingTop: 15 }}>
 							<TenantPropertyItem label="Date Registered" value={current.context.payload?.dateRegistered.toString() ?? ""} />
 							<TenantPropertyItem label="Place" value={current.context.payload?.place?.name.toString() ?? ""} />
-							<TenantPropertyItem label="Remarks" value={current.context.payload?.remarks.toString() ?? ""} />
+							<TenantPropertyItem label="Building No." value={current.context.payload?.buildingNumber ?? ""} />
+						</Stack>
+						<Stack direction="column" alignItems="stretch" spacing={10} style={{ paddingTop: 15 }}>
+							<TenantPropertyItem label="Remarks" value={current.context.payload?.remarks.toString() ?? ""} />{" "}
 						</Stack>
 					</Stack>
 				</Panel>

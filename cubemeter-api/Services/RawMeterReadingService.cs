@@ -49,11 +49,13 @@ namespace cubemeter_api.Services
             }
         }
 
-        public async Task<RawMeterReading> GetAsync(Expression<Func<RawMeterReading, bool>> expression)  =>  await _dbContext.RawMeterReadings.SingleOrDefaultAsync(expression);
+        public async Task<RawMeterReading> GetAsync(Expression<Func<RawMeterReading, bool>> expression) => await _dbContext.RawMeterReadings.SingleOrDefaultAsync(expression);
 
-        public async Task<RawMeterReading> GetLastReadingFromMeter(string meterName)
+        public async Task<RawMeterReading?> GetLastReadingFromMeter(string meterName)
         {
-            return await _dbContext.RawMeterReadings.Where(reading => reading.MeterName.Equals(meterName)).OrderByDescending(reading => reading.Id).FirstAsync();
+            var readings = await _dbContext.RawMeterReadings.Where(reading => reading.MeterName == meterName).ToListAsync();
+
+            return readings.Count > 0 ? readings.Last() : null;
         }
 
         public async Task<List<RawMeterReading>> ListAsync(Expression<Func<RawMeterReading, bool>> expression) => await _dbContext.RawMeterReadings.Where(expression).ToListAsync();

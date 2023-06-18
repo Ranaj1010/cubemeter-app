@@ -1,7 +1,9 @@
 "use client";
 import { IMeterReading } from "@/models/meter-reading";
+import { IMeterReadingBatch } from "@/models/meter-reading-batch";
 import { Ref } from "react";
-import { Pagination, Table } from "rsuite";
+import { MdFileOpen } from "react-icons/md";
+import { Button, Pagination, Stack, Table } from "rsuite";
 import { SortType, TableInstance } from "rsuite/esm/Table";
 const { Column, HeaderCell, Cell } = Table;
 interface IMeterReadingTableProp {
@@ -102,6 +104,64 @@ export const MeterReadingTableComponent = (props: IMeterReadingTableProp) => {
 					size="xs"
 					layout={["total", "-", "limit", "|", "pager", "skip"]}
 					total={data.length}
+					limitOptions={[10, 30, 50]}
+					limit={limit}
+					activePage={page}
+					onChangePage={onChangePage}
+					onChangeLimit={onChangeLimit}
+				/>
+			</div>
+		</div>
+	);
+};
+
+interface IMeterReadingBatchTableProp {
+	data: IMeterReadingBatch[];
+	limit: number;
+	page: number;
+	onChangeLimit: (limit: number) => void;
+	onChangePage: (page: number) => void;
+	onHandleView: (batch: IMeterReadingBatch) => void;
+	sortColumn: any;
+	sortType: any;
+	ref?: Ref<TableInstance<IMeterReadingBatch, unknown>>;
+	onHandleSortColumn: (dataKey: string, sortType?: SortType | undefined) => void;
+}
+
+export const MeterReadingBatchTableComponent = (props: IMeterReadingBatchTableProp) => {
+	const { data, limit, page, onChangeLimit, onChangePage, onHandleView, onHandleSortColumn, sortType, sortColumn } = props;
+
+	return (
+		<div>
+			<Table autoHeight data={data} sortColumn={sortColumn} sortType={sortType} onSortColumn={onHandleSortColumn}>
+				<Column flexGrow={5} fixed sortable>
+					<HeaderCell>Generated At</HeaderCell>
+					<Cell dataKey="createdAt" style={{ padding: "5px" }}>
+						{(rowData) => (
+							<Stack direction="row">
+								<MdFileOpen />
+								<Stack.Item>
+									<Button appearance="link" onClick={() => onHandleView(rowData as IMeterReadingBatch)}>
+										{new Date((rowData as IMeterReadingBatch).createdAt).toUTCString()}
+									</Button>
+								</Stack.Item>
+							</Stack>
+						)}
+					</Cell>
+				</Column>
+			</Table>
+			<div style={{ padding: 20 }}>
+				<Pagination
+					prev
+					next
+					first
+					last
+					ellipsis
+					boundaryLinks
+					maxButtons={5}
+					size="xs"
+					layout={["total", "-", "limit", "|", "pager", "skip"]}
+					total={data != null ? data.length : 0}
 					limitOptions={[10, 30, 50]}
 					limit={limit}
 					activePage={page}

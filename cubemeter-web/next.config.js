@@ -5,7 +5,7 @@ const nextConfig = {
 	},
 	env: {
 		MAPBOX_TOKEN: "pk.eyJ1IjoicmFuYWoxMDEwOTUiLCJhIjoiY2xnODNhbGE1MGI0bzNlcDlkd3FtY3FsciJ9.6NylfqJEDlEDt-hoEicuJQ",
-		API_URL: "http://localhost:5198/",
+		API_URL: "https://localhost:5199/",
 	},
 };
 

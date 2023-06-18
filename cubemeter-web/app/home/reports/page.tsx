@@ -1,13 +1,15 @@
 "use client";
 import { BreadCrumbComponent } from "@/components/breadcrumbs";
+import { FailedNotification, SuccessNotification } from "@/components/notifications";
 import { IMeterReading } from "@/models/meter-reading";
+import { IMeterReadingBatch } from "@/models/meter-reading-batch";
 import { useMachine } from "@xstate/react";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { downloadExcel } from "react-export-table-to-excel";
-import { MdDownload, MdPrint } from "react-icons/md";
+import { MdPrint } from "react-icons/md";
 import { Button, Nav, Placeholder, Stack, useToaster } from "rsuite";
-import { MeterReadingTableComponent } from "./component";
+import { MeterReadingBatchTableComponent } from "./component";
 import ReportsMachine from "./machine";
 
 const Page = () => {
@@ -74,6 +76,8 @@ const Page = () => {
 		return filtered;
 	};
 
+	const handleViewMeterReadingBatchDetails = (batch: IMeterReadingBatch) => router.push(`/home/reports/details?id=${batch.id}`);
+
 	const handleDownloadExcel = () => {
 		downloadExcel({
 			fileName: `CUBEMETER_READING_${new Date().getFullYear()}_${new Date().getMonth()}_${new Date().getDate()}`,
@@ -86,10 +90,32 @@ const Page = () => {
 		});
 	};
 
-	const body2 = [
-		{ firstname: "Edison", lastname: "Padilla", age: 14 },
-		{ firstname: "Cheila", lastname: "Rodriguez", age: 56 },
-	];
+	useEffect(() => {
+		if (current.matches("generateMeterReading.success")) {
+			toaster.push(<SuccessNotification title="Success" message="Reading has been generated." onCloseNotification={() => toaster.clear()} />, {
+				duration: 3000,
+				placement: placement,
+			});
+			send("FETCH_METER_READING_BATCHES");
+		}
+		if (current.matches("generateMeterReading.failed")) {
+			toaster.push(
+				<FailedNotification
+					title="Failed"
+					message={current.context.errorMessage}
+					onRetry={() => send("RETRY")}
+					onCancel={() => {
+						send("CANCEL");
+						toaster.clear();
+					}}
+				/>,
+				{
+					placement: placement,
+					duration: 50000,
+				}
+			);
+		}
+	}, [current.value]);
 
 	return (
 		<Stack direction="column" spacing={20} alignItems="stretch">
@@ -111,30 +137,20 @@ const Page = () => {
 			</Nav>
 			{navKey == "meter-reading" && (
 				<Stack wrap direction="column" alignItems="stretch" spacing={20}>
-					<Stack spacing={20} alignItems="flex-end" justifyContent="flex-end">
-						<Button
-							appearance="primary"
-							startIcon={<MdPrint />}
-							disabled={!current.matches("idle")}
-							onClick={() => send("FETCH_METER_READING")}
-						>
-							Generate Reading
-						</Button>
-
-						<Button
-							appearance="ghost"
-							startIcon={<MdDownload />}
-							disabled={!current.matches("idle")}
-							onClick={() => handleDownloadExcel()}
-						>
-							Export
-						</Button>
-					</Stack>
+					<Button
+						appearance="primary"
+						startIcon={<MdPrint />}
+						loading={current.matches("generateMeterReading.generating")}
+						disabled={!current.matches("idle")}
+						onClick={() => send("GENERATE_METER_READING")}
+					>
+						Generate Reading
+					</Button>
 					{current.matches("fetchingMeterReadingData.fetching") && <Placeholder.Grid rows={5} columns={6} active />}
 					{!current.matches("fetchingMeterReadingData.fetching") && (
-						<MeterReadingTableComponent
+						<MeterReadingBatchTableComponent
 							ref={meterReadingTableRef}
-							data={current.context.data}
+							data={current.context.batches}
 							limit={limit}
 							page={page}
 							onChangePage={setPage}
@@ -142,6 +158,7 @@ const Page = () => {
 							onHandleSortColumn={handleSortColumn}
 							sortColumn={sortColumn}
 							sortType={sortType}
+							onHandleView={handleViewMeterReadingBatchDetails}
 						/>
 					)}
 				</Stack>

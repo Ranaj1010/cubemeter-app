@@ -8,14 +8,14 @@ export default function Loading() {
 	return (
 		<Stack direction="column" spacing={20} alignItems="stretch">
 			<BreadCrumbComponent
-				currentTitle="Tenants"
+				currentTitle="Reports"
 				breadCrumbs={[
 					{
 						title: "Home",
 						href: "/home/dashboard",
 					},
 					{
-						title: "Tenants",
+						title: "Reports",
 						active: true,
 					},
 				]}

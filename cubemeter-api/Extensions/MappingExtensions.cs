@@ -4,6 +4,7 @@ using cubemeter_api.DTOs.Meter.Incoming;
 using cubemeter_api.DTOs.Meter.Outgoing;
 using cubemeter_api.DTOs.Place;
 using cubemeter_api.DTOs.Place.Incoming;
+using cubemeter_api.DTOs.Reports;
 using cubemeter_api.DTOs.Tenant;
 using cubemeter_api.DTOs.Tenant.Incoming;
 using cubemeter_api.DTOs.Tenant.Outgoing;
@@ -53,6 +54,7 @@ namespace cubemeter_api.Utilities
             CreateMap<Meter, AddMeterResponse>();
             CreateMap<UpdateMeterRequest, Meter>();
             CreateMap<Meter, MeterDto>().ReverseMap();
+            CreateMap<MeterReadingBatch, MeterReadingBatchDto>().ReverseMap();
             #endregion
         }
     }
