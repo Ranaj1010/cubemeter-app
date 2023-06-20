@@ -1,6 +1,6 @@
 using cubemeter_api.Base;
 
-namespace cubemeter_api.DTOs._MeterReading.Outgoing
+namespace cubemeter_api.DTOs.MeterReading.Outgoing
 {
     public class GeneratedMeterReadingReportResponse : BaseResponse
     {

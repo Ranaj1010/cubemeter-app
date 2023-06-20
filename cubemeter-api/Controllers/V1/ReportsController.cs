@@ -1,6 +1,6 @@
 using AutoMapper;
-using cubemeter_api.DTOs._MeterReading.Incoming;
-using cubemeter_api.DTOs._MeterReading.Outgoing;
+using cubemeter_api.DTOs.MeterReading.Incoming;
+using cubemeter_api.DTOs.MeterReading.Outgoing;
 using cubemeter_api.DTOs.Reports;
 using cubemeter_api.DTOs.Reports.Outgoing;
 using cubemeter_api.Interfaces;

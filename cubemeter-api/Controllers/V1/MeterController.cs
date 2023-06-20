@@ -1,6 +1,4 @@
 using AutoMapper;
-using cubemeter_api.DTOs._MeterReading.Incoming;
-using cubemeter_api.DTOs._MeterReading.Outgoing;
 using cubemeter_api.DTOs.Meter;
 using cubemeter_api.DTOs.Meter.Incoming;
 using cubemeter_api.DTOs.Meter.Outgoing;

@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using cubemeter_api.Data;
-using cubemeter_api.DTOs._MeterReading.Outgoing;
+using cubemeter_api.DTOs.MeterReading.Outgoing;
 using cubemeter_api.Entities;
 using cubemeter_api.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-namespace cubemeter_api.DTOs._MeterReading.Incoming
+namespace cubemeter_api.DTOs.MeterReading.Incoming
 {
     public class GeneratedMeterReadingReportRequest
     {
