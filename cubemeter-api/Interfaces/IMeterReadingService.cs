@@ -1,5 +1,5 @@
 using cubemeter_api.Base;
-using cubemeter_api.DTOs._MeterReading.Outgoing;
+using cubemeter_api.DTOs.MeterReading.Outgoing;
 using cubemeter_api.Entities;
 
 namespace cubemeter_api.Interfaces
