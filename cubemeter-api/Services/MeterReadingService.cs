@@ -96,7 +96,7 @@ namespace cubemeter_api.Services
                 if (batch != null)
                 {
                     var reading = new MeterReading();
-                    var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter(meter.Name);
+                    var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter($"{meter.Tenant.Gateway}/{meter.Tenant.UnitId}");
                     var previousReading = await GetPreviousReadingAsync(meter);
                     var currentReading = recentMeterReading != null ? recentMeterReading.Kilowatthour : 0;
                     var currentConsumption = previousReading != null ? currentReading - previousReading.CurrentReading : 0;
