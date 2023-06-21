@@ -86,36 +86,30 @@ namespace cubemeter_api.Services
             return reports;
         }
 
-        public async Task<MeterReading> GenerateReadingAsync(Meter meter)
+        public async Task<MeterReading> GenerateReadingAsync(Meter meter, long batchId)
         {
             try
             {
-                var newReading = new MeterReading();
-                var batch = await _meterReadingBatchService.AddAsync(new MeterReadingBatch());
+                var reading = new MeterReading();
+                var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter($"{meter.Tenant.Gateway}/{meter.Tenant.UnitId}");
+                var previousReading = await GetPreviousReadingAsync(meter);
+                var currentReading = recentMeterReading != null ? recentMeterReading.Kilowatthour : 0;
+                var currentConsumption = previousReading != null ? currentReading - previousReading.CurrentReading : 0;
+                var previousConsumption = previousReading != null ? previousReading.CurrentConsumption : 0;
 
-                if (batch != null)
-                {
-                    var reading = new MeterReading();
-                    var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter($"{meter.Tenant.Gateway}/{meter.Tenant.UnitId}");
-                    var previousReading = await GetPreviousReadingAsync(meter);
-                    var currentReading = recentMeterReading != null ? recentMeterReading.Kilowatthour : 0;
-                    var currentConsumption = previousReading != null ? currentReading - previousReading.CurrentReading : 0;
-                    var previousConsumption = previousReading != null ? previousReading.CurrentConsumption : 0;
+                reading.MeterReadingBatchId = batchId;
+                reading.MeterId = meter.Id;
+                reading.TenantId = meter.TenantId;
+                reading.CurrentConsumption = currentConsumption;
+                reading.PreviousConsumption = previousConsumption;
+                reading.PreviousReading = previousReading != null ? previousReading.CurrentReading : 0;
+                reading.CurrentReading = currentReading;
+                reading.PercentageDifference = previousConsumption > 0 ? (currentConsumption - previousConsumption) / previousConsumption : 0;
+                reading.Multi = 1;
 
-                    reading.MeterReadingBatchId = batch.Id;
-                    reading.MeterId = meter.Id;
-                    reading.TenantId = meter.TenantId;
-                    reading.CurrentConsumption = currentConsumption;
-                    reading.PreviousConsumption = previousConsumption;
-                    reading.PreviousReading = previousReading != null ? previousReading.CurrentReading : 0;
-                    reading.CurrentReading = currentReading;
-                    reading.PercentageDifference = previousConsumption > 0 ? (currentConsumption - previousConsumption) / previousConsumption : 0;
-                    reading.Multi = 1;
+                reading = await AddAsync(reading);
 
-                    reading = await AddAsync(reading);
-                }
-
-                return newReading;
+                return reading;
             }
             catch (System.Exception)
             {
@@ -127,10 +121,14 @@ namespace cubemeter_api.Services
         public async Task<List<MeterReading>> GenerateReadingsAsync(List<Meter> meters)
         {
             var readings = new List<MeterReading>();
+            var batch = await _meterReadingBatchService.AddAsync(new MeterReadingBatch());
 
-            foreach (var meter in meters)
+            if (batch != null)
             {
-                readings.Add(await GenerateReadingAsync(meter));
+                foreach (var meter in meters)
+                {
+                    readings.Add(await GenerateReadingAsync(meter, batch.Id));
+                }
             }
 
             return readings;
