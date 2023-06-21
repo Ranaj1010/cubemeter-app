@@ -56,22 +56,21 @@ namespace cubemeter_api.Controllers
             {
                 var recentMeterReading = await _rawMeterReadingService.GetLastReadingFromMeter($"{meter.Tenant.Gateway}/{meter.Tenant.UnitId}");
 
-                if (recentMeterReading != null){
-                    data.Add(new CustomMeterDto
-                    {
-                        Kilowatthour = recentMeterReading.Kilowatthour,
-                        Id = meter.Id,
-                        MeterType = meter.MeterType,
-                        MeterUploadType = meter.MeterUploadType,
-                        Name = meter.Name,
-                        Ratio = meter.Ratio,
-                        Remarks = meter.Remarks,
-                        SerialNumber = meter.SerialNumber,
-                        SortNumber = meter.SortNumber,
-                        Tenant = _mapper.Map<TenantDto>(meter.Tenant),
-                        TenantId = meter.TenantId
-                    });
-                }
+                data.Add(new CustomMeterDto
+                {
+                    Kilowatthour = recentMeterReading != null ? recentMeterReading.Kilowatthour : 0,
+                    Id = meter.Id,
+                    MeterType = meter.MeterType,
+                    MeterUploadType = meter.MeterUploadType,
+                    Name = meter.Name,
+                    Ratio = meter.Ratio,
+                    Remarks = meter.Remarks,
+                    SerialNumber = meter.SerialNumber,
+                    SortNumber = meter.SortNumber,
+                    Tenant = _mapper.Map<TenantDto>(meter.Tenant),
+                    TenantId = meter.TenantId
+                });
+
             }
 
             var response = new GetMetersWithKilowattHourResponse
@@ -195,6 +194,6 @@ namespace cubemeter_api.Controllers
 
             return Ok(response);
         }
-      
+
     }
 }
