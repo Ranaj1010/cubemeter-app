@@ -20,7 +20,7 @@ namespace cubemeter_api.Services
         private List<RawMeterReading> _rawReadings;
         private List<string> _topics;
         private bool _hasNewAddedTopic = false;
-        private readonly string _host = "5.189.132.25";
+        private readonly string _host = "172.104.102.236";
         private PeriodicTimer _timer;
 
         public MqttClientService(ILogger<MqttClientService> logger, MqttFactory mqttFactory, IMqttClient mqttClient, IMeterService meterService, IRawMeterReadingService rawMeterReadingService)
@@ -52,7 +52,7 @@ namespace cubemeter_api.Services
                 await SubscribeToTopic(topic);
             }
 
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+            _timer = new PeriodicTimer(TimeSpan.FromMinutes(30));
 
             _ = Task.Run(async () =>
             {
